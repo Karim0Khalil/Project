@@ -13,10 +13,10 @@
 
 void print_Array(int [6][7]);
 int isOver(int[6][7],int,int);
-int findRow(int[6][7]);
-int checkVertically(int[6][7], int row, int column);
-int checkHorizontally(int[6][7], int row, int column);
-int checkDiagonally_1(int[6][7], int row, int column);
+int findRow(int[6][7],int column);
+int checkVertically(int[6][7], int row, int column,int size);
+int checkHorizontally(int[6][7], int row, int column,int size);
+int checkDiagonally_1(int[6][7], int row, int column,int size);
 
 int main()
 {
