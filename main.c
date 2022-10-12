@@ -23,9 +23,11 @@ Effects: initializes the entries to "0".
 void initializeBoard(int board[6][7]){
     int i;
     int j;
-    for (i=0;i<6;i++){
-        for (j=0;j<7;j++){
-            board[i][j]=0;
+    for (i = 0; i < 6; i++)
+    {
+        for (j = 0; j < 7; j++)
+        {
+            board[i][j] = 0;
         }
     }
 }
@@ -38,13 +40,16 @@ plays, and "2" if Yellow plays.
 */
 void updateBoard(int column,int board[6][7],char player){
     int i;
-    for (i=5;i>=0;i--){
-        if (board[i][column-1]==0&&player=='R'){
-            board[i][column-1]=1;
+    for (i = 5; i >= 0; i--)
+    {
+        if (board[i][column - 1] == 0 && player == 'R')
+        {
+            board[i][column - 1] = 1;
             break;
         }
-        else if (board[i][column-1]==0&&player=='Y'){
-            board[i][column-1]=2;
+        else if (board[i][column - 1] == 0 && player == 'Y')
+        {
+            board[i][column - 1] = 2;
             break;
         }
     }
@@ -79,18 +84,23 @@ Effects: prints the entries of the board.
 */
 void printBoard(int board[6][7]){
     int i;
+
     int j;
-    for (i=0;i<15;i++){
+    for (i = 0; i < 15; i++)
+    {
         printf("- ");
     }
     printf("\n");
-    for(i=0;i<6;i++){
-        for (j=0;j<7;j++){
-            printf("| %d ",board[i][j]);
+    for (i = 0; i < 6; i++)
+    {
+        for (j = 0; j < 7; j++)
+        {
+            printf("| %d ", board[i][j]);
         }
         printf("|\n");
     }
-    for (i=0;i<15;i++){
+    for (i = 0; i < 15; i++)
+    {
         printf("- ");
     }
     printf("\n");
@@ -228,5 +238,5 @@ int main()
 {
     int board[6][7];
     char arr[100];
-    Connect4(board,arr);
+    Connect4(board, arr);
 }
