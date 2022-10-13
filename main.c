@@ -110,10 +110,11 @@ void printBoard(int board[6][7]){
 
 /*Requires: Nothing.
 Effects: A vlaue 1 or 2 indicating which of the two players is going to start.
+Adapted from: https://stackoverflow.com/questions/822323/how-to-generate-a-random-int-in-c
 */
 int CoinToss(){
     srand(time(NULL));   
-    int r = 1+(rand()%3);//Line 93 and 94 were taken from https://stackoverflow.com/questions/822323/how-to-generate-a-random-int-in-c
+    int r = 1+(rand()%3);
     return r;
 }
 
@@ -140,11 +141,9 @@ void Connect4(int board[6][7],char input[100]){
     struct Player Player_2;
     Player_2.time_taken=0;
 
-    //Creating pointers to the Players, first we'll assign them randomly.
+    //Creating pointers to the Players.
     struct Player *Redptr;
-    Redptr=&Player_1;
     struct Player *YellowPtr;
-    YellowPtr=&Player_2;
 
 
     printf("Player 1, Enter your name please: ");
