@@ -18,14 +18,14 @@ int checkVertically(int[6][7], int row, int column,int size);
 int checkHorizontally(int[6][7], int row, int column,int size);
 int checkDiagonally_1(int[6][7], int row, int column,int size);
 
-int main()
-{
-	int array[6][7] = { {1,0,0,0,0,0,0},{1,1,0,0,0,0,0},{1,1,0,0,0,0,0},{1,0,1,0,0,0,0},{1,0,0,1,0,0,0},
-							{1,0,0,0,1,1,0}};
+// int main()
+// {
+// 	int array[6][7] = { {1,0,0,0,0,0,0},{1,1,0,0,0,0,0},{1,1,0,0,0,0,0},{1,0,1,0,0,0,0},{1,0,0,1,0,0,0},
+// 							{1,0,0,0,1,1,0}};
 
-	print_Array(array);
-	printf("%d", checkVertically(array, 0, 0, 1));  //Should return 1.
-}
+// 	print_Array(array);
+// 	printf("%d", checkVertically(array, 0, 0, 1));  //Should return 1.
+// }
 
 void print_Array(int array[6][7])
 {
@@ -45,20 +45,6 @@ void print_Array(int array[6][7])
 	}
 }
 
-int isOver(int array[6][7], int column,int input)
-{
-	int columns = 7;
-	int rows = 6;
-	int row = findRow(array,column);
-
-	int vertical = checkVertically(array,row,column,input);
-	int horizontal = checkHorizontally(array,row,column,input);
-	int diagonal1 = checkDiagonally_1(array,row,column,input);
-	int diagonal2 = checkDiagonally_2(array,row,column,input);
-
-	return vertical + horizontal + diagonal1 + diagonal2;
-	
-}
 
 int findRow(int array[6][7],int column)
 {
@@ -197,4 +183,18 @@ int checkDiagonally_2(int array[6][7], int row, int column,int input)
 		streak = 0;
 	}
 	return 0;
+}
+int isOver(int array[6][7], int column,int input)
+{
+	int columns = 7;
+	int rows = 6;
+	int row = findRow(array,column);
+
+	int vertical = checkVertically(array,row,column,input);
+	int horizontal = checkHorizontally(array,row,column,input);
+	int diagonal1 = checkDiagonally_1(array,row,column,input);
+	int diagonal2 = checkDiagonally_2(array,row,column,input);
+
+	return vertical + horizontal + diagonal1 + diagonal2;
+	
 }
