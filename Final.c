@@ -200,13 +200,13 @@ void Connect4(int board[6][7],char input[100]){
 
 
     //Check if the game is over here.
-    if(k>5){
-        if(isOver(board,column,1)>0){
-            printf("%s won", Redptr->Name);
-            printf("Haidar!!");
-            
+    //k>5 because no one would have won before 7 tries (before incrementation).
+     if(k>5){
+        if(isOver(board,column-1,1)>0){
+            printf(" CONGRATULATIONS %s, you won!!!\n", Redptr->Name);
+            break;
         }
-    }
+     }
 
 
     k++;
@@ -230,16 +230,18 @@ void Connect4(int board[6][7],char input[100]){
 
 
     //Check if the game is Over here.
-    if(k>5){
-        if(isOver(board,column,2)>0){
-            printf("%s won", YellowPtr->Name);
-            printf("Haidar!!");
-            
+     if(k>5){
+        if(isOver(board,column-1,2)>0){
+            printf(" CONGRATULATIONS %s, you won!!!\n", YellowPtr->Name);
+            break;
         }
-    }
+     }
 
 
     k++;
+
+    }
+
     if(k==42){
         if(Redptr->time_taken > YellowPtr-> time_taken){
             printf(" CONGRATULATIONS %s, you won!!!", Redptr->Name);
@@ -247,9 +249,6 @@ void Connect4(int board[6][7],char input[100]){
         else{
             printf(" CONGRATULATIONS %s, you won!!!", YellowPtr->Name);
         }
-    }
-
-
     }
 
 }
