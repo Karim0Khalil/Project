@@ -6,26 +6,13 @@
 *
 */
 
-
-
 #include <stdio.h>
-
-
 void print_Array(int [6][7]);
 int isOver(int[6][7],int,int);
-int findRow(int[6][7],int column);
+int findRow(int[6][7],int column,int input);
 int checkVertically(int[6][7], int row, int column,int size);
 int checkHorizontally(int[6][7], int row, int column,int size);
 int checkDiagonally_1(int[6][7], int row, int column,int size);
-
-// int main()
-// {
-// 	int array[6][7] = { {1,0,0,0,0,0,0},{1,1,0,0,0,0,0},{1,1,0,0,0,0,0},{1,0,1,0,0,0,0},{1,0,0,1,0,0,0},
-// 							{1,0,0,0,1,1,0}};
-
-// 	print_Array(array);
-// 	printf("%d", checkVertically(array, 0, 0, 1));  //Should return 1.
-// }
 
 void print_Array(int array[6][7])
 {
@@ -46,17 +33,17 @@ void print_Array(int array[6][7])
 }
 
 
-int findRow(int array[6][7],int column)
+int findRow(int array[6][7],int column,int input)
 {
 	int row = 0;
 	int i = 0;
 	int insertion = array[0][column];
-	if (insertion == 1)
+	if (insertion == input)
 		row = 0;
 	else
 	{
 		insertion = -1;
-		while (insertion != 1)
+		while (insertion != input)
 		{
 			insertion = array[++i][column];
 		}
@@ -188,7 +175,7 @@ int isOver(int array[6][7], int column,int input)
 {
 	int columns = 7;
 	int rows = 6;
-	int row = findRow(array,column);
+	int row = findRow(array,column,input);
 
 	int vertical = checkVertically(array,row,column,input);
 	int horizontal = checkHorizontally(array,row,column,input);
