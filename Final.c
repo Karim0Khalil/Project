@@ -5,7 +5,7 @@
 #include <string.h>
 #include <time.h>
 #include <Windows.h>
-#include "GameOver.c"
+#include "CheckWin.c"
 
 
 
@@ -194,7 +194,7 @@ void Connect4(int board[6][7],char input[100]){
     }
     column=input[0]-'0'; //"input" is a char array, so we convert to int.
     end_t=clock();
-    Redptr->time_taken += (double)(end_t - start_t) / CLOCKS_PER_SEC;//This increments Red's timer.
+    Redptr->time_taken += ((double)(end_t - start_t))/CLOCKS_PER_SEC;//This increments Red's timer.
     updateBoard(column,board,'R');
     printBoard(board);
 
@@ -224,7 +224,7 @@ void Connect4(int board[6][7],char input[100]){
 
     column=input[0]-'0'; //"input" is a char array, so we convert to int.
     end_t=clock();
-    YellowPtr->time_taken += (double)(end_t - start_t) / CLOCKS_PER_SEC;//This increments Yellow's timer.
+    YellowPtr->time_taken = YellowPtr->time_taken + ((double)(end_t - start_t))/CLOCKS_PER_SEC;//This increments Yellow's timer.
     updateBoard(column,board,'Y');
     printBoard(board);
 
@@ -243,11 +243,15 @@ void Connect4(int board[6][7],char input[100]){
     }
 
     if(k==42){
-        if(Redptr->time_taken > YellowPtr-> time_taken){
+        if(Redptr->time_taken < YellowPtr-> time_taken){
+            printf("Time taken by %s:%f\n",YellowPtr->Name,YellowPtr->time_taken);
+            printf("Time taken by %s:%f\n",Redptr->Name,Redptr->time_taken);
             printf(" CONGRATULATIONS %s, you won!!!", Redptr->Name);
         }
         else{
-            printf(" CONGRATULATIONS %s, you won!!!", YellowPtr->Name);
+            printf(" CONGRATULATIONS %s, you won!!!\n", YellowPtr->Name);
+            printf("Time taken by %s:%f\n",YellowPtr->Name,YellowPtr->time_taken);
+            printf("Time taken by %s:%f",Redptr->Name,Redptr->time_taken);
         }
     }
 
