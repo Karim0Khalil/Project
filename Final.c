@@ -1,3 +1,72 @@
+/*
+       Horizontal Case
+- - - - - - - - - - - - - - - 
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 2 | 0 | 0 | 2 | 0 | 0 | 0 |
+| 2 | 1 | 1 | 1 | 1 | 0 | 0 |
+- - - - - - - - - - - - - - -
+Player 1 wins in row 6 from columns 1 to 4 
+
+
+
+
+        Vertical Case
+- - - - - - - - - - - - - - - 
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 1 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 1 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 1 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 1 | 2 | 2 | 2 | 0 | 0 |
+- - - - - - - - - - - - - - -
+Player 1 wins in column 2 from rows 1 to 4
+
+
+
+
+
+  Diagonal To The Right Case
+- - - - - - - - - - - - - - - 
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 2 | 0 | 0 | 0 |
+| 0 | 0 | 2 | 1 | 0 | 0 | 0 |
+| 1 | 2 | 1 | 1 | 0 | 0 | 0 |
+| 2 | 1 | 1 | 2 | 2 | 0 | 0 |
+- - - - - - - - - - - - - - -
+Player 2 wins in rows 3 to 6 and columns 1 to 4
+
+
+
+
+  Diagonal To The Left Case
+- - - - - - - - - - - - - - - 
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 2 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 2 | 2 | 0 | 0 | 0 | 0 |
+| 0 | 1 | 1 | 2 | 1 | 0 | 0 |
+| 1 | 1 | 2 | 1 | 2 | 0 | 0 |
+- - - - - - - - - - - - - - -
+Player 2 wins in rows 3 to 6 and columns 1 to 4
+
+
+
+         Tie Case
+- - - - - - - - - - - - - - - 
+| 2 | 1 | 1 | 2 | 2 | 1 | 2 |
+| 1 | 2 | 2 | 1 | 1 | 2 | 1 |
+| 2 | 1 | 2 | 2 | 1 | 1 | 2 |
+| 1 | 2 | 2 | 1 | 1 | 2 | 1 |
+| 2 | 1 | 1 | 2 | 2 | 1 | 2 |
+| 1 | 2 | 2 | 1 | 1 | 2 | 1 |
+- - - - - - - - - - - - - - -
+In this case the player who spent less time during his turns wins the game.
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -165,8 +234,8 @@ void Connect4(int board[6][7],char input[100]){
 
     int who_starts=CoinToss();
 
-    if (who_starts==1){
-        Player_1.Color='R';
+    if (who_starts==1){         //Actually we are not tossing a coin to see who starts, we actually toss a coin to see who is the red player (Player with insert number 1) 
+        Player_1.Color='R';     //and the red player always starts.
         Player_2.Color='Y';
         Redptr=&Player_1;
         YellowPtr=&Player_2;
