@@ -1,3 +1,5 @@
+
+// THIS IS WHERE THE GAME RUNS
 /*
        Horizontal Case
 - - - - - - - - - - - - - - - 
@@ -87,7 +89,7 @@ struct Player
 };
 
 
-/*Requires: A declared 6x7 2D array.
+/*Requires: A declared 6x7 integer 2D array.
 Effects: initializes the entries to "0".
 */
 void initializeBoard(int board[6][7]){
@@ -149,7 +151,7 @@ bool valid_And_Legal(char input[100], int board[6][7]){
 
 
 /*
-Requires: The game board(a 6x7 2D array)
+Requires: The game board(a 6x7 integer 2D array)
 Effects: prints the entries of the board.
 */
 void printBoard(int board[6][7]){
