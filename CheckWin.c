@@ -218,6 +218,103 @@ int * GetValidLocations(int board[6][7]){
 			}
 	return arr;
 }
+int CountWindow(int window[],int size, int piece){
+    int count = 0;
+    for(int i=0;i<size;++i){
+        if(window[i]==piece){
+            count++;
+        }   
+    }
+    return count;
+}
+int evauluate_window(int window[], int size, int piece){
+    int score = 0;
+    int opp_piece = 1;
+    if(piece==1){
+        opp_piece=2;
+    }
+    if(CountWindow(window,4,piece)==4){
+        score+=100;
+    }
+    else if(CountWindow(window,4,piece)==3 && CountWindow(window,4,0)==1){
+        score+=5;
+    }
+    else if(CountWindow(window,4,piece)==2 && CountWindow(window,4,0)==2){
+        score+=2;
+    }
+    if(CountWindow(window,4,opp_piece)==3 && CountWindow(window,4,0)==1){
+        score-=4;
+    }
+    return score;
+}
+
+
+
+
+int scoreposition(int board[6][7], int piece){
+    int score = 0;
+    int window[4];
+    //Score center column
+    int centerarray[6];
+    int center_count=0;
+    for(int i=0;i<6;++i){
+            centerarray[i]=board[i][3];
+            if(centerarray[i]==piece){
+                ++center_count;
+            }
+    }
+    score += center_count*3;
+    //Score Horizontal
+    for(int r=0;r<6;++r){
+        int row_array[7];
+        for(int j=0;j<7;++j){
+            row_array[r]=board[r][j];
+        }
+        for(int c=0;c<7-3;++c){
+            for(int i=0;i<4;++i){
+             window[i]=row_array[i+c];   
+            }
+            score+=evauluate_window(window,4,piece);
+    }
+    }
+    //Score vertical
+    for(int c=0;c<7;++c){
+        int col_array[6];
+        for(int i=0;i<6;++i){
+            col_array[i]=board[i][c];
+        }
+        for(int r=0;r<6-3;++r){
+            for(int i=0;i<4;++i){
+                window[i]=col_array[i+r];
+            }
+            score+=evauluate_window(window,4,piece);
+        }
+    }
+    //Score diagonal
+    for(int r=0;r<6-3;++r){
+        for(int c=0;c<7-3;++c){
+            for(int i=0;i<4;++i){
+                window[i]=board[r+i][c+i];
+            }
+            score+=evauluate_window(window,4,piece);
+        }
+    } 
+
+    for(int r=0;r<6-3;++r){
+        for(int c=0;c<7-3;++c){
+            for(int i=0;i<4;++i){
+                window[i]=board[r+3-i][c+i];
+            }
+            score+=evauluate_window(window,4,piece);
+        }
+    }
+
+    return score;
+} 
+
+
+
+
 
 int is_terminal_node(int ** board,int column)
 {
