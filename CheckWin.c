@@ -265,13 +265,13 @@ int *minimax(int ** board,int depth, double alpha, double beta, int Player, int 
 			int column =0;
 			for(int col=0;col<Length(validLocations);col++)
 			{
-				int row = nextopenRow(board,col);
-				updateBoard(col,board,'R');
-				int new_score= minimax(board,depth-1,alpha,beta,2,col);
+				int row = nextopenRow(board,validLocations[col]);
+				updateBoard(validLocations[col],board,'R');
+				int new_score= minimax(board,depth-1,alpha,beta,2,validLocations[col]);
 				if(new_score>value)
 				{
 					value=new_score;
-					column=col;
+					column=validLocations[col];
 				}
 				if(value>=alpha)
 					alpha=value;
@@ -289,13 +289,13 @@ int *minimax(int ** board,int depth, double alpha, double beta, int Player, int 
 			int column =0;
 			for(int col=0;col<Length(validLocations);col++)
 			{
-				int row = nextopenRow(board,col);
-				updateBoard(col,board,'R');
-				int new_score= minimax(board,depth-1,alpha,beta,2,col);
+				int row = nextopenRow(board,validLocations[col]);
+				updateBoard(validLocations[col],board,'R');
+				int new_score= minimax(board,depth-1,alpha,beta,2,validLocations[col]);
 				if(new_score>value)
 				{
 					value=new_score;
-					column=col;
+					column=validLocations[col];
 				}
 				if(value<=beta)
 					beta=value;
