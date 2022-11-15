@@ -92,7 +92,7 @@ struct Player
 /*Requires: A declared 6x7 integer 2D array.
 Effects: initializes the entries to "0".
 */
-void initializeBoard(int board[6][7]){
+void initializeBoard(int **board){
     int i;
     int j;
     for (i = 0; i < 6; i++)
@@ -110,7 +110,7 @@ board so far, and the player(Red or Yellow).
 Effects: updates the game board with the value "1" if Red
 plays, and "2" if Yellow plays.
 */
-void updateBoard(int column,int board[6][7],char player){
+void updateBoard(int column,int **board,char player){
     int i;
     for (i = 5; i >= 0; i--)
     {
@@ -132,7 +132,7 @@ void updateBoard(int column,int board[6][7],char player){
 Effects: returns true if the input is valid (an integer between 1 and 7) 
 and the column is not full, else it returns false.
 */
-bool valid_And_Legal(char input[100], int board[6][7]){
+bool valid_And_Legal(char input[100], int **board){
     //Because this is a char array, we need to convert from ascii to int.
     int column=input[0]-'0';
     if ((strlen(input)>2)||(column<1||column>7)==1){
@@ -154,7 +154,7 @@ bool valid_And_Legal(char input[100], int board[6][7]){
 Requires: The game board(a 6x7 integer 2D array)
 Effects: prints the entries of the board.
 */
-void printBoard(int board[6][7]){
+void printBoard(int **board){
     int i;
 
     int j;
@@ -191,11 +191,114 @@ int CoinToss(){
 }
 
 
+
+
+int *minimax(int **board, int depth, double alpha, double beta, int Player, int columnPlayed,char P_Character)
+{
+	int *validLocations=GetValidLocations(board);
+	int *play =(int*) malloc(2 * sizeof(int));
+    if(columnPlayed!=-1){
+		int Who_won = isOver(board, columnPlayed);
+		if (Who_won == 1&&P_Character=='R')
+		{
+			play[0] = -313;
+			play[1] = 10000000;
+			return play;
+		}
+		else if (Who_won == -1&&P_Character=='Y')
+		{
+			play[0] = -313;
+			play[1] = -10000000;
+			return play;
+		}
+		else if (NumberOfValidPositions(validLocations) == 0)
+		{
+			play[0] = -313;
+			play[1] = 0;
+		}
+		else
+		{
+			play[0] = -313;
+            if(Player==0&&P_Character=='R')
+			play[1] = scoreposition(board, 2);
+            else if(Player==1&&P_Character=='Y')
+            play[1]=scoreposition(board,2);
+            else 
+            play[1]=scoreposition(board,1);
+			return play;
+		}
+    }
+    else{
+		if (Player == 1)
+		{
+			long long int value = -999999999999;
+			int column = 0;
+			for (int col = 0; col < 7; col++)
+			{
+				if (validLocations[col] == -1)
+				{
+					continue;
+				}
+				//int row = nextopenRow(board, validLocations[col]);
+				int **copy_b= copyFunction(board);
+				updateBoard(validLocations[col], copy_b, 'R');
+				int *new_score = minimax(copy_b, depth - 1, alpha, beta, 0, validLocations[col],'Y');
+				if (new_score[1] > value)
+				{
+					value = new_score[1];
+					column = validLocations[col];
+				}
+				if (value >= alpha)
+					alpha = value;
+				if (alpha >= beta)
+					break;
+				play[0] = column;
+				play[1] = value;
+
+				return play;
+			}
+		}
+		else
+		{
+			long long int value = 999999999999;
+			int column = 0;
+			for (int col = 0; col < 7; col++)
+			{
+				if (validLocations[col] == -1)
+				{
+					continue;
+				}
+				//int row = nextopenRow(board, validLocations[col]);
+				int **copy_b = copyFunction(board);
+				updateBoard(validLocations[col], copy_b, 'Y');
+				int *new_score = minimax(copy_b, depth - 1, alpha, beta, 1, validLocations[col],'R');
+				if (new_score[1] > value)
+				{
+					value = new_score[1];
+					column = validLocations[col];
+				}
+				if (value <= beta)
+					beta = value;
+				if (beta <= alpha)
+					break;
+
+				play[0] = column;
+				play[1] = value;
+
+				return play;
+			}
+        }
+    }
+}
+
+
+
+
 /*
 Requires: The game board along with an input array.
 Effects: combines the functionalities made to run the game.
 */
-void Connect4(int board[6][7],char input[100]){
+void Connect4(int **board,char input[100]){
 
     initializeBoard(board);
 
@@ -217,7 +320,9 @@ void Connect4(int board[6][7],char input[100]){
     struct Player *Redptr;
     struct Player *YellowPtr;
 
-
+    printf("Press 1 for 1 Player Mode, 2 for 2 Players: ");
+    int a;
+    scanf("%d",&a);
     printf("Player 1, Enter your name please: ");
     fgets(Player_1.Name,40,stdin);
 
@@ -226,10 +331,11 @@ void Connect4(int board[6][7],char input[100]){
     Player_1.Name[strcspn(Player_1.Name, "\n")] = 0;
 
     printf("\n");
-
-    printf("Player 2, Enter your name please: ");
+    if(a==2){
+    printf("BOTTT, Enter your name please: ");
     fgets(Player_2.Name,40,stdin);
     Player_2.Name[strcspn(Player_2.Name, "\n")] = 0;
+    }
     printf("We will toss a coin to see who's lucky to start!\n");
 
     Sleep(2000);//let them wait, just for fun :)
@@ -241,7 +347,12 @@ void Connect4(int board[6][7],char input[100]){
         Player_2.Color='Y';
         Redptr=&Player_1;
         YellowPtr=&Player_2;
+        if(a==2)
         printf("%s was lucky enough to start!\n",Player_1.Name);
+        else {
+        printf("The Bot was lucky enough to start!\n");
+        strcpy(Player_2.Name,"Bot");
+        }
     }
     else 
     {
@@ -249,14 +360,19 @@ void Connect4(int board[6][7],char input[100]){
         Player_1.Color='Y';
         Redptr=&Player_2;
         YellowPtr=&Player_1;
+        if (a==2)
         printf("%s was lucky enough to start!\n",Player_2.Name);
+        else{ 
+        printf("The bot was lucky enough to start!\n");
+        strcpy(Player_1.Name,"Bot");
+        }
     }
 
     while (k<42){
-
     printf("%s , Enter a number between 1 and 7: ",Redptr->Name);
 
     start_t=clock();
+    if(a==2){
     fgets(input,100,stdin);
     while (valid_And_Legal(input,board)==0){
 
@@ -264,6 +380,11 @@ void Connect4(int board[6][7],char input[100]){
     
     }
     column=input[0]-'0'; //"input" is a char array, so we convert to int.
+    }
+    else {
+        int *move=minimax(board,4,-99999999,99999999,1,-1,Redptr->Color);
+        int column=move[1]+1;
+    }
     end_t=clock();
     Redptr->time_taken += ((double)(end_t - start_t))/CLOCKS_PER_SEC;//This increments Red's timer.
     updateBoard(column,board,'R');
@@ -273,7 +394,7 @@ void Connect4(int board[6][7],char input[100]){
     //Check if the game is over here.
     //k>5 because no one would have won before 7 tries (before incrementation).
      if(k>5){
-        if(isOver(board,column-1,1)>0){
+        if(isOver(board,column-1)>0){
             printf(" CONGRATULATIONS %s, you won!!!\n", Redptr->Name);
             break;
         }
@@ -286,14 +407,19 @@ void Connect4(int board[6][7],char input[100]){
     printf("%s , Enter a number between 1 and 7: ",YellowPtr->Name);
 
     start_t=clock();
+    if(a==2){
     fgets(input,100,stdin);
     while (valid_And_Legal(input,board)==0){
 
         fgets(input,100,stdin);
     
     }
-
     column=input[0]-'0'; //"input" is a char array, so we convert to int.
+    }
+    else {
+        int *move=minimax(board,4,-99999999,99999999,1,-1,YellowPtr->Color);
+        int column=move[1]+1;
+    }
     end_t=clock();
     YellowPtr->time_taken = YellowPtr->time_taken + ((double)(end_t - start_t))/CLOCKS_PER_SEC;//This increments Yellow's timer.
     updateBoard(column,board,'Y');
@@ -302,7 +428,7 @@ void Connect4(int board[6][7],char input[100]){
 
     //Check if the game is Over here.
      if(k>5){
-        if(isOver(board,column-1,2)>0){
+        if(isOver(board,column-1)>0){
             printf(" CONGRATULATIONS %s, you won!!!\n", YellowPtr->Name);
             break;
         }
@@ -328,11 +454,9 @@ void Connect4(int board[6][7],char input[100]){
 
 }
 
-
-
 int main()
 {
-    int board[6][7];
+    int **board;
     char arr[100];
     Connect4(board, arr);
 }
