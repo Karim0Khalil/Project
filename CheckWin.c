@@ -15,11 +15,13 @@ int findRow(int **array, int column)
 {
 	int i = 0;
 	int row = 0;
-	int insertion = array[row][column];
-	while (i == 0)
+	int insertion = array[0][column];
+	while (row<=4)
 	{
-		if (insertion == 0)
+		if (insertion == 0){
 			row++;
+			insertion=array[row][column];
+		}
 		else if (insertion != 0)
 			break;
 	}
@@ -172,10 +174,10 @@ int isOver(int **array, int column)
 	int diagonal2 = checkDiagonally_2(array, row, column, input);
 
 	int result = vertical + horizontal + diagonal1 + diagonal2;
-	if (result > 0 && input == 1)
+	if (result > 0)
 		return 1;
-	else if (result > 0 && input == 2)
-		return -1;
+	// else if (result > 0 && input == 2)
+	// 	return -1;
 }
 // int nextopenRow(int **board, int column)
 // {
