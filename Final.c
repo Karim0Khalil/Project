@@ -78,8 +78,6 @@ In this case the player who spent less time during his turns wins the game.
 #include <Windows.h>
 #include "CheckWin.c"
 
-
-
 struct Player
 {
     char Name[40];
@@ -93,6 +91,14 @@ struct Player
 Effects: initializes the entries to "0".
 */
 void initializeBoard(int **board){
+    
+   board = (int **)malloc(sizeof(int *)* 6);
+   for (int i = 0; i < 6; i++)
+   {
+      board[i] = (int*)malloc(sizeof(int) * 7);
+   }
+
+
     int i;
     int j;
     for (i = 0; i < 6; i++)
@@ -184,20 +190,19 @@ void printBoard(int **board){
 Effects: A vlaue 1 or 2 indicating which of the two players is going to start.
 Adapted from: https://stackoverflow.com/questions/822323/how-to-generate-a-random-int-in-c
 */
-int CoinToss(){
+int CoinToss()
+{
     srand(time(NULL));   
     int r = 1+(rand()%3);
     return r;
 }
-
-
-
-
 int *minimax(int **board, int depth, double alpha, double beta, int Player, int columnPlayed,char P_Character)
 {
 	int *validLocations=GetValidLocations(board);
 	int *play =(int*) malloc(2 * sizeof(int));
-    if(columnPlayed!=-1){
+
+    if(columnPlayed!=-1)
+    {
 		int Who_won = isOver(board, columnPlayed);
 		if (Who_won == 1&&P_Character=='R')
 		{
@@ -228,7 +233,8 @@ int *minimax(int **board, int depth, double alpha, double beta, int Player, int 
 			return play;
 		}
     }
-    else{
+    else
+    {
 		if (Player == 1)
 		{
 			long long int value = -999999999999;
@@ -290,9 +296,6 @@ int *minimax(int **board, int depth, double alpha, double beta, int Player, int 
         }
     }
 }
-
-
-
 
 /*
 Requires: The game board along with an input array.
@@ -430,6 +433,7 @@ void Connect4(int **board,char input[100]){
      if(k>5){
         if(isOver(board,column-1)>0){
             printf(" CONGRATULATIONS %s, you won!!!\n", YellowPtr->Name);
+            free(board);
             break;
         }
      }
@@ -444,11 +448,13 @@ void Connect4(int **board,char input[100]){
             printf("Time taken by %s:%f\n",YellowPtr->Name,YellowPtr->time_taken);
             printf("Time taken by %s:%f\n",Redptr->Name,Redptr->time_taken);
             printf(" CONGRATULATIONS %s, you won!!!", Redptr->Name);
+            free(board);
         }
         else{
             printf(" CONGRATULATIONS %s, you won!!!\n", YellowPtr->Name);
             printf("Time taken by %s:%f\n",YellowPtr->Name,YellowPtr->time_taken);
             printf("Time taken by %s:%f",Redptr->Name,Redptr->time_taken);
+            free(board);
         }
     }
 

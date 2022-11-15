@@ -8,25 +8,6 @@ int checkVertically(int**, int row, int column, int size);
 int checkHorizontally(int**, int row, int column, int size);
 int checkDiagonally_1(int**, int row, int column, int size);
 
-// requires: the board as a 2D array
-// effects: prints the array as a form of a matrix
-// void print_Array(int array[6][7])
-// {
-// 	int i = 0;
-// 	int j = 0;
-// 	int rows = 6;
-// 	int columns = 7;
-
-// 	for (i; i < rows; i++)
-// 	{
-// 		for (j; j < columns; j++)
-// 		{
-// 			printf("%2d", array[i][j]);
-// 		}
-// 		j = 0;
-// 		printf("\n");
-// 	}
-// }
 
 // requires: the board, the column that was last played at, an whose turn it was
 // effects: returns the row that was played at
