@@ -1,159 +1,161 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
-void print_Array(int**);
-int isOver(int**, int);
-int findRow(int** , int column);
-int checkVertically(int**, int row, int column, int size);
-int checkHorizontally(int**, int row, int column, int size);
-int checkDiagonally_1(int**, int row, int column, int size);
+//void print_Array(int**);
+//int isOver(int**, int);
+//int findRow(int** , int column);
+//int checkVertically(int**, int row, int column, int size);
+//int checkHorizontally(int**, int row, int column, int size);
+//int checkDiagonally_1(int**, int row, int column, int size);
 
 
 // requires: the board, the column that was last played at, an whose turn it was
 // effects: returns the row that was played at
 int findRow(int **array, int column)
 {
-	int i = 0;
-	int row = 0;
-	int insertion = array[0][column];
-	while (row<=4)
-	{
-		if (insertion == 0){
-			row++;
-			insertion=array[row][column];
-		}
-		else if (insertion != 0)
-			break;
-	}
-	return row;
+    int i = 0;
+    int row = 0;
+    int insertion = array[0][column];
+    while (row<=4)
+    {
+        if (insertion == 0){
+            row++;
+            insertion=array[row][column];
+        }
+        else if (insertion != 0)
+            break;
+    }
+    return row;
 }
 
 // requires: the board, column and row that the last turn was played at, and whose turn it was
 // effects: return 1 if there is any win at the row the last turn was played at
 int checkVertically(int **array, int row, int column, int input)
 {
-	int i = 0;
-	int j = i;
-	int streak = 0;
+    int i = 0;
+    int j = i;
+    int streak = 0;
 
-	while (5 - i >= 3) // there are 3 possible wins at each horizontal level
-	{
-		for (j; j < 4 + i; j++)
-		{
-			if (array[j][column] == input) // checks that if there is a win, the win must be from one player only
-				streak++;
-		}
+    while (5 - i >= 3) // there are 3 possible wins at each horizontal level
+    {
+        for (j; j < 4 + i; j++)
+        {
+            if (array[j][column] == input) // checks that if there is a win, the win must be from one player only
+                streak++;
+        }
 
-		if (streak == 4)
-			return 1;
+        if (streak == 4)
+            return 1;
 
-		i++;
-		j = i;
-		streak = 0;
-	}
-	return 0;
+        i++;
+        j = i;
+        streak = 0;
+    }
+    return 0;
 }
 
 // requires: the board, column and row that the last turn was played at, and whose turn it was
 // effects: return 1 if there is any win at the column the last turn was played at
 int checkHorizontally(int **array, int row, int column, int input)
 {
-	int i = 0;
-	int j = i;
-	int streak = 0;
+    int i = 0;
+    int j = i;
+    int streak = 0;
 
-	while (6 - i >= 3) // there are 4 possible wins at each horizontal level
-	{
-		for (j; j < 4 + i; j++)
-		{
-			if (array[row][j] == input) // checks that if there is a win, the win must be from one player only
-				streak++;
-		}
+    while (6 - i >= 3) // there are 4 possible wins at each horizontal level
+    {
+        for (j; j < 4 + i; j++)
+        {
+            if (array[row][j] == input) // checks that if there is a win, the win must be from one player only
+                streak++;
+        }
 
-		if (streak == 4)
-			return 1;
+        if (streak == 4)
+            return 1;
 
-		i++;
-		j = i;
-		streak = 0;
-	}
-	return 0;
+        i++;
+        j = i;
+        streak = 0;
+    }
+    return 0;
 }
 
 // requires: the board, column and row that the last turn was played at, and whose turn it was
 // effects: return 1 if there is any win at the diagonal to the right the last turn was played at
 int checkDiagonally_1(int **array, int row, int column, int input)
 {
-	int diagonal[6] = {-1, -1, -1, -1, -1, -1};
-	int i = 0;
+    int diagonal[6] = {-1, -1, -1, -1, -1, -1};
+    int i = 0;
 
-	while (row <= 5 && column > 0)
-	{
-		row++;
-		column--;
-	}
+    while (row <= 5 && column > 0)
+    {
+        row++;
+        column--;
+    }
 
-	while (row >= 0 && column <= 6)
-	{
-		diagonal[i] = (*(array+row)+column);
-		row-=1;
-		column+=1;
-		i++;
-	}
-	
-	i = 0;
-	int j = 0;
-	int streak = 0;
+    while (row >= 0 && column <= 6)
+    {
+        diagonal[i] = (int)(*(array+row)+column);
+        row-=1;
+        column+=1;
+        i++;
+    }
 
-	for (i; i < 3; i++)
-	{
-		for (j; j < 4; j++)
-		{
-			if (diagonal[j + i] == input) // checks that if there is a win, the win must be from one player only
-				streak++;
-		}
-		if (streak == 4)
-			return 1;
-		j = 0;
-		streak = 0;
-	}
-	return 0;
+    i = 0;
+    int j = 0;
+    int streak = 0;
+
+    for (i; i < 3; i++)
+    {
+        for (j; j < 4; j++)
+        {
+            if (diagonal[j + i] == input) // checks that if there is a win, the win must be from one player only
+                streak++;
+        }
+        if (streak == 4)
+            return 1;
+        j = 0;
+        streak = 0;
+    }
+    return 0;
 }
 
 // requires: the board, column and row that the last turn was played at, and whose turn it was
 // effects: return 1 if there is any win at the diagonal to the left the last turn was played at
 int checkDiagonally_2(int **array, int row, int column, int input)
 {
-	int diagonal[6] = {-1, -1, -1, -1, -1, -1};
-	int i = 0;
+    int diagonal[6] = {-1, -1, -1, -1, -1, -1};
+    int i = 0;
 
-	while (row < 5 && column > 0)
-	{
-		row++;
-		column++;
-	}
-	while (row >= 0 && column <= 6)
-	{
-		diagonal[i] = array[row--][column--];
-		i++;
-	}
-	i = 0;
-	int j = 0;
-	int streak = 0;
+    while (row < 5 && column > 0)
+    {
+        row++;
+        column++;
+    }
+    while (row >= 0 && column <= 6)
+    {
+        diagonal[i] = (int)(*(array+row)+column);
+        row-=1;
+        column+=1;
+        i++;
+    }
+    i = 0;
+    int j = 0;
+    int streak = 0;
 
-	for (i; i < 3; i++)
-	{
-		for (j; j < 4; j++)
-		{
-			if (diagonal[j + i] == input) // checks that if there is a win, the win must be from one player only
-				streak++;
-		}
-		if (streak == 4)
-			return 1;
-		j = 0;
-		streak = 0;
-	}
-	return 0;
+    for (i; i < 3; i++)
+    {
+        for (j; j < 4; j++)
+        {
+            if (diagonal[j + i] == input) // checks that if there is a win, the win must be from one player only
+                streak++;
+        }
+        if (streak == 4)
+            return 1;
+        j = 0;
+        streak = 0;
+    }
+    return 0;
 }
 
 /*
@@ -165,21 +167,21 @@ int checkDiagonally_2(int **array, int row, int column, int input)
  */
 int isOver(int **array, int column)
 {
-	int columns = 7;
-	int rows = 6;
-	int row = findRow(array, column);
-	int input = array[row][column];
+    int columns = 7;
+    int rows = 6;
+    int row = findRow(array, column);
+    int input = array[row][column];
 
-	int vertical = checkVertically(array, row, column, input);
-	int horizontal = checkHorizontally(array, row, column, input);
-	int diagonal1 = checkDiagonally_1(array, row, column, input);
-	int diagonal2 = checkDiagonally_2(array, row, column, input);
+    int vertical = checkVertically(array, row, column, input);
+    int horizontal = checkHorizontally(array, row, column, input);
+    int diagonal1 = checkDiagonally_1(array, row, column, input);
+    int diagonal2 = checkDiagonally_2(array, row, column, input);
 
-	int result = vertical + horizontal + diagonal1 + diagonal2;
-	if (result > 0)
-		return 1;
-	// else if (result > 0 && input == 2)
-	// 	return -1;
+    int result = vertical + horizontal + diagonal1 + diagonal2;
+    if (result > 0&&input==1)
+        return 1;
+    else if (result > 0 && input == 2)
+        return -1;
 }
 // int nextopenRow(int **board, int column)
 // {
@@ -189,169 +191,169 @@ int isOver(int **array, int column)
 // }
 int *GetValidLocations(int **board)
 {
-	int *arr = (int *)malloc(sizeof(int) * 7);
-	for (int i = 0; i < 7; ++i)
-	{
-		arr[i] = -1;
-	}
-	for (int i = 0; i < 7; ++i)
-	{
-		if (board[0][i] == 0)
-			arr[i] = i;
-	}
-	return arr;
+    int *arr = (int *)malloc(sizeof(int) * 7);
+    for (int i = 0; i < 7; ++i)
+    {
+        arr[i] = -1;
+    }
+    for (int i = 0; i < 7; ++i)
+    {
+        if (board[0][i] == 0)
+            arr[i] = i;
+    }
+    return arr;
 }
 int CountWindow(int window[], int size, int piece)
 {
-	int count = 0;
-	for (int i = 0; i < size; ++i)
-	{
-		if (window[i] == piece)
-		{
-			count++;
-		}
-	}
-	return count;
+    int count = 0;
+    for (int i = 0; i < size; ++i)
+    {
+        if (window[i] == piece)
+        {
+            count++;
+        }
+    }
+    return count;
 }
 int evauluate_window(int window[], int size, int piece)
 {
-	int score = 0;
-	int opp_piece = 1;
-	if (piece == 1)
-	{
-		opp_piece = 2;
-	}
-	if (CountWindow(window, 4, piece) == 4)
-	{
-		score += 100;
-	}
-	else if (CountWindow(window, 4, piece) == 3 && CountWindow(window, 4, 0) == 1)
-	{
-		score += 5;
-	}
-	else if (CountWindow(window, 4, piece) == 2 && CountWindow(window, 4, 0) == 2)
-	{
-		score += 2;
-	}
-	if (CountWindow(window, 4, opp_piece) == 3 && CountWindow(window, 4, 0) == 1)
-	{
-		score -= 4;
-	}
-	return score;
+    int score = 0;
+    int opp_piece = 1;
+    if (piece == 1)
+    {
+        opp_piece = 2;
+    }
+    if (CountWindow(window, 4, piece) == 4)
+    {
+        score += 100;
+    }
+    else if (CountWindow(window, 4, piece) == 3 && CountWindow(window, 4, 0) == 1)
+    {
+        score += 5;
+    }
+    else if (CountWindow(window, 4, piece) == 2 && CountWindow(window, 4, 0) == 2)
+    {
+        score += 2;
+    }
+    if (CountWindow(window, 4, opp_piece) == 3 && CountWindow(window, 4, 0) == 1)
+    {
+        score -= 4;
+    }
+    return score;
 }
 
 int **copyFunction(int **board)
 {
-	int **copy =(int**) malloc(6 * sizeof(int *));
-	if (copy == NULL)
-	{
-		printf("out of memory\n");
-		return NULL;
-	}
-	for (int i = 0; i < 6; i++)
-	{
-		copy[i] =(int*) malloc(7 * sizeof(int));
-		if (copy[i] == NULL)
-		{
-			printf("out of memory\n");
-			return NULL;
-		}
-	}
-	for (int i = 0; i < 6; i++)
-	{
-		for (int j = 0; j < 7; j++)
-		{
-			copy[i][j] = board[i][j];
-		}
-	}
-	return copy;
+    int **copy =(int**) malloc(6 * sizeof(int *));
+    if (copy == NULL)
+    {
+        printf("out of memory\n");
+        return NULL;
+    }
+    for (int i = 0; i < 6; i++)
+    {
+        copy[i] =(int*) malloc(7 * sizeof(int));
+        if (copy[i] == NULL)
+        {
+            printf("out of memory\n");
+            return NULL;
+        }
+    }
+    for (int i = 0; i < 6; i++)
+    {
+        for (int j = 0; j < 7; j++)
+        {
+            copy[i][j] = board[i][j];
+        }
+    }
+    return copy;
 }
 
 int scoreposition(int **board, int piece)
 {
-	int score = 0;
-	int window[4];
-	// Score center column
-	int centerarray[6];
-	int center_count = 0;
-	for (int i = 0; i < 6; ++i)
-	{
-		centerarray[i] = board[i][3];
-		if (centerarray[i] == piece)
-		{
-			++center_count;
-		}
-	}
-	score += center_count * 3;
-	// Score Horizontal
-	for (int r = 0; r < 6; ++r)
-	{
-		int row_array[7];
-		for (int j = 0; j < 7; ++j)
-		{
-			row_array[r] = board[r][j];
-		}
-		for (int c = 0; c < 7 - 3; ++c)
-		{
-			for (int i = 0; i < 4; ++i)
-			{
-				window[i] = row_array[i + c];
-			}
-			score += evauluate_window(window, 4, piece);
-		}
-	}
-	// Score vertical
-	for (int c = 0; c < 7; ++c)
-	{
-		int col_array[6];
-		for (int i = 0; i < 6; ++i)
-		{
-			col_array[i] = board[i][c];
-		}
-		for (int r = 0; r < 6 - 3; ++r)
-		{
-			for (int i = 0; i < 4; ++i)
-			{
-				window[i] = col_array[i + r];
-			}
-			score += evauluate_window(window, 4, piece);
-		}
-	}
-	// Score diagonal
-	for (int r = 0; r < 6 - 3; ++r)
-	{
-		for (int c = 0; c < 7 - 3; ++c)
-		{
-			for (int i = 0; i < 4; ++i)
-			{
-				window[i] = board[r + i][c + i];
-			}
-			score += evauluate_window(window, 4, piece);
-		}
-	}
+    int score = 0;
+    int window[4];
+    // Score center column
+    int centerarray[6];
+    int center_count = 0;
+    for (int i = 0; i < 6; ++i)
+    {
+        centerarray[i] = board[i][3];
+        if (centerarray[i] == piece)
+        {
+            ++center_count;
+        }
+    }
+    score += center_count * 3;
+    // Score Horizontal
+    for (int r = 0; r < 6; ++r)
+    {
+        int row_array[7];
+        for (int j = 0; j < 7; ++j)
+        {
+            row_array[r] = board[r][j];
+        }
+        for (int c = 0; c < 7 - 3; ++c)
+        {
+            for (int i = 0; i < 4; ++i)
+            {
+                window[i] = row_array[i + c];
+            }
+            score += evauluate_window(window, 4, piece);
+        }
+    }
+    // Score vertical
+    for (int c = 0; c < 7; ++c)
+    {
+        int col_array[6];
+        for (int i = 0; i < 6; ++i)
+        {
+            col_array[i] = board[i][c];
+        }
+        for (int r = 0; r < 6 - 3; ++r)
+        {
+            for (int i = 0; i < 4; ++i)
+            {
+                window[i] = col_array[i + r];
+            }
+            score += evauluate_window(window, 4, piece);
+        }
+    }
+    // Score diagonal
+    for (int r = 0; r < 6 - 3; ++r)
+    {
+        for (int c = 0; c < 7 - 3; ++c)
+        {
+            for (int i = 0; i < 4; ++i)
+            {
+                window[i] = board[r + i][c + i];
+            }
+            score += evauluate_window(window, 4, piece);
+        }
+    }
 
-	for (int r = 0; r < 6 - 3; ++r)
-	{
-		for (int c = 0; c < 7 - 3; ++c)
-		{
-			for (int i = 0; i < 4; ++i)
-			{
-				window[i] = board[r + 3 - i][c + i];
-			}
-			score += evauluate_window(window, 4, piece);
-		}
-	}
+    for (int r = 0; r < 6 - 3; ++r)
+    {
+        for (int c = 0; c < 7 - 3; ++c)
+        {
+            for (int i = 0; i < 4; ++i)
+            {
+                window[i] = board[r + 3 - i][c + i];
+            }
+            score += evauluate_window(window, 4, piece);
+        }
+    }
 
-	return score;
+    return score;
 }
 int NumberOfValidPositions(int *ValidPositions)
 {
-	int size=0;
-	for(int i=0;i<7;i++){
-		if (ValidPositions[i]!=-1)
-		size++;
-	}
-	return size;
+    int size=0;
+    for(int i=0;i<7;i++){
+        if (ValidPositions[i]!=-1)
+            size++;
+    }
+    return size;
 }
 
 int AI = 1;
