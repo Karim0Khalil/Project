@@ -196,13 +196,13 @@ int *minimax(int **board, int depth, double alpha, double beta, int Player, int 
     if (columnPlayed != -1)
     {
         int Who_won = isOver(board, columnPlayed);
-        if (Who_won == 1 && AIPIECE==1)
+        if ((Who_won == 1 && AIPIECE==1) || (Who_won == -1 && AIPIECE == 2) == 1)
         {
             play[0] = columnPlayed;
             play[1] = 10000000;
             return play;
         }
-        else if (Who_won == -1 && AIPIECE==2)
+        else if ((Who_won == 1 && AIPIECE==2) || (Who_won == -1 && AIPIECE == 1) == 1)
         {
             play[0] = columnPlayed;
             play[1] = -10000000;
@@ -474,29 +474,13 @@ void Connect4(int **board, char input[100])
         Player_2.Name[0]='B';
         Player_2.Name[1]='O';
         Player_2.Name[2]='T';
-
+        
         printf("We will toss a coin to see who's lucky to start!\n");
 
         Sleep(1000);//let them wait, just for fun :)
 
         int who_starts=CoinToss();
 
-        if (who_starts==1){         //Actually we are not tossing a coin to see who starts, we actually toss a coin to see who is the red player (Player with insert number 1)
-            Player_1.Color='R';     //and the red player always starts.
-            Player_2.Color='Y';
-            Redptr=&Player_1;
-            YellowPtr=&Player_2;
-            printf("%s was lucky enough to start!\n",Player_1.Name);
-        }
-        else
-        {
-            Player_2.Color='R';
-            Player_1.Color='Y';
-            Redptr=&Player_2;
-            YellowPtr=&Player_1;
-            printf("%s was lucky enough to start!\n",Player_2.Name);
-        }
-
 
 
 
@@ -504,14 +488,14 @@ void Connect4(int **board, char input[100])
 
         if (who_starts==1){         //Actually we are not tossing a coin to see who starts, we actually toss a coin to see who is the red player (Player with insert number 1)
             Player_1.Color='R';     //and the red player always starts.
-            Player_2.Color='Y';
+            Player_2.Color='Y';     //Bot is yellow and player is red
             Redptr=&Player_1;
             YellowPtr=&Player_2;
             printf("%s was lucky enough to start!\n",Player_1.Name);
         }
         else
         {
-            Player_2.Color='R';
+            Player_2.Color='R';    //Bot is red and player is yellow
             Player_1.Color='Y';
             Redptr=&Player_2;
             YellowPtr=&Player_1;
@@ -540,14 +524,14 @@ void Connect4(int **board, char input[100])
 
                 }
                 column=input[0]-'0'; //"input" is a char array, so we convert to int.
-                updateBoard(column,board,1);
+                updateBoard(column,board,2);
             }
 
             else
             {
                 int *min_max=minimax(board,3,-9999999999,9999999999,1,-1);
                 column=min_max[0]+1;
-                updateBoard(column,board,1);
+                updateBoard(column,board,2);
             }
 
             end_t=clock();
@@ -558,10 +542,16 @@ void Connect4(int **board, char input[100])
             //Check if the game is over here.
             //k>5 because no one would have won before 7 tries (before incrementation).
             if(k>5){
-                if(isOver(board,column-1)==1){
+                int Who_won=isOver(board,column-1);
+                if((Who_won == 1 && AIPIECE==1) || (Who_won == -1 && AIPIECE == 2) == 1){
                     printf(" CONGRATULATIONS %s, you won!!!\n", Redptr->Name);
                     break;
                 }
+                else if((Who_won == 1 && AIPIECE==2) || (Who_won == -1 && AIPIECE == 1) == 1)
+                    {
+                        printf(" CONGRATULATIONS %s, you won!!!\n", YellowPtr->Name);
+                        break;
+                    }
             }
 
             k++;
@@ -600,10 +590,16 @@ void Connect4(int **board, char input[100])
 
             //Check if the game is Over here.
             if(k>5){
-                if(isOver(board,column-1)==-1){
-                    printf(" CONGRATULATIONS %s, you won!!!\n", YellowPtr->Name);
+                int Who_won=isOver(board,column-1);
+                if((Who_won == 1 && AIPIECE==1) || (Who_won == -1 && AIPIECE == 2) == 1){
+                    printf(" CONGRATULATIONS %s, you won!!!\n", Redptr->Name);
                     break;
                 }
+                else if((Who_won == 1 && AIPIECE==2) || (Who_won == -1 && AIPIECE == 1) == 1)
+                    {
+                        printf(" CONGRATULATIONS %s, you won!!!\n", YellowPtr->Name);
+                        break;
+                    }
             }
 
             k++;
