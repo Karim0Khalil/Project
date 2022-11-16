@@ -95,10 +95,12 @@ int checkDiagonally_1(int **array, int row, int column, int input)
 
 	while (row >= 0 && column <= 6)
 	{
-		diagonal[i] = array[row--][column++];
+		diagonal[i] = (*(array+row)+column);
+		row-=1;
+		column+=1;
 		i++;
 	}
-
+	
 	i = 0;
 	int j = 0;
 	int streak = 0;

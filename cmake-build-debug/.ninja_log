@@ -1,0 +1,8 @@
+# ninja log v5
+29	162	6901251222942865	CMakeFiles/Project.dir/test.c.obj	2d2f9f9f3be38c63
+22	238	6901251223717557	CMakeFiles/Project.dir/GameOver.c.obj	697555fb7816848c
+18	259	6901251223893069	CMakeFiles/Project.dir/tempCodeRunnerFile.c.obj	9cb8071b35d0a10d
+13	273	6901251224083117	CMakeFiles/Project.dir/project.c.obj	5518bfafa8880cdd
+7	3511	6901251256470450	CMakeFiles/Project.dir/main.c.obj	708ce9ef4183907
+6	330	6902299469890103	CMakeFiles/Project.dir/CheckWin.c.obj	ad7bad650c4eeb61
+12	1261	6902299479134890	CMakeFiles/Project.dir/Final.c.obj	9e3eda59236eeb76
