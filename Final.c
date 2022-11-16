@@ -307,10 +307,9 @@ void Connect4(int **board, char input[100])
 
 
     int a;
-    printf("Enter 1 for Single Player, 2 for Two Players");
+    printf("Enter 1 for Single Player, 2 for Two Players: ");
 
     scanf("%d",&a);
-
     fflush(stdin);
 
     if(a==2){
@@ -414,7 +413,7 @@ void Connect4(int **board, char input[100])
 
             //Check if the game is Over here.
             if(k>5){
-                if(isOver(board,column-1)>0){
+                if(isOver(board,column-1)<0){
                     printf(" CONGRATULATIONS %s, you won!!!\n", YellowPtr->Name);
                     break;
                 }
