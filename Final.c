@@ -304,140 +304,6 @@ Effects: combines the functionalities made to run the game.
 */
 void Connect4(int **board, char input[100])
 {
-
-    //if(TwoPlayers)
-
-
-    // initializeBoard(board);
-
-    // int column;
-    // int k=0;//for the number of tries.
-
-    // //Timer variables
-    // clock_t start_t,end_t;
-
-    // //Creating the Players.
-
-    // struct Player Player_1;
-    // Player_1.time_taken=0;
-
-    // struct Player Player_2;
-    // Player_2.time_taken=0;
-
-    // //Creating pointers to the Players.
-    // struct Player *Redptr;
-    // struct Player *YellowPtr;
-
-    // printf("Player 1, Enter your name please: ");
-    // fgets(Player_1.Name,40,stdin);
-
-    // //fgets adds "\n" to the end of the name so it gets printed with it, to solve it
-    // //we adapted this piece of code from https://stackoverflow.com/questions/2693776/removing-trailing-newline-character-from-fgets-input#:~:text=Replacing%20a%20%5Cn%20with%20a,of%20%22removing%22%20the%20newline.
-    // Player_1.Name[strcspn(Player_1.Name, "\n")] = 0;
-
-    // printf("\n");
-
-    // printf("Player 2, Enter your name please: ");
-    // fgets(Player_2.Name,40,stdin);
-    // Player_2.Name[strcspn(Player_2.Name, "\n")] = 0;
-    // printf("We will toss a coin to see who's lucky to start!\n");
-
-    // Sleep(2000);//let them wait, just for fun :)
-
-    // int who_starts=CoinToss();
-
-    // if (who_starts==1){         //Actually we are not tossing a coin to see who starts, we actually toss a coin to see who is the red player (Player with insert number 1) 
-    //     Player_1.Color='R';     //and the red player always starts.
-    //     Player_2.Color='Y';
-    //     Redptr=&Player_1;
-    //     YellowPtr=&Player_2;
-    //     printf("%s was lucky enough to start!\n",Player_1.Name);
-    // }
-    // else 
-    // {
-    //     Player_2.Color='R';
-    //     Player_1.Color='Y';
-    //     Redptr=&Player_2;
-    //     YellowPtr=&Player_1;
-    //     printf("%s was lucky enough to start!\n",Player_2.Name);
-    // }
-
-    // while (k<42){
-
-    // printf("%s , Enter a number between 1 and 7: ",Redptr->Name);
-
-    // start_t=clock();
-    // fgets(input,100,stdin);
-    // while (valid_And_Legal(input,board)==0){
-
-    //     fgets(input,100,stdin);
-    
-    // }
-    // column=input[0]-'0'; //"input" is a char array, so we convert to int.
-    // end_t=clock();
-    // Redptr->time_taken += ((double)(end_t - start_t))/CLOCKS_PER_SEC;//This increments Red's timer.
-    // updateBoard(column,board,'R');
-    // printBoard(board);
-
-    // //Check if the game is over here.
-    // //k>5 because no one would have won before 7 tries (before incrementation).
-    //  if(k>5){
-    //     if(isOver(board,column-1)>0){
-    //         printf(" CONGRATULATIONS %s, you won!!!\n", Redptr->Name);
-    //         break;
-    //     }
-    //  }
-
-    // k++;
-
-    // printf("%s , Enter a number between 1 and 7: ",YellowPtr->Name);
-
-    // start_t=clock();
-    // fgets(input,100,stdin);
-    // while (valid_And_Legal(input,board)==0){
-
-    //     fgets(input,100,stdin);
-    
-    // }
-
-    // column=input[0]-'0'; //"input" is a char array, so we convert to int.
-    // end_t=clock();
-    // YellowPtr->time_taken = YellowPtr->time_taken + ((double)(end_t - start_t))/CLOCKS_PER_SEC;//This increments Yellow's timer.
-    // updateBoard(column,board,'Y');
-    // printBoard(board);
-
-    // //Check if the game is Over here.
-    //  if(k>5){
-    //     if(isOver(board,column-1)>0){
-    //         printf(" CONGRATULATIONS %s, you won!!!\n", YellowPtr->Name);
-    //         break;
-    //     }
-    //  }
-
-    // k++;
-
-    // }
-
-    // if(k==42){
-    //     if(Redptr->time_taken < YellowPtr-> time_taken){
-    //         printf("Time taken by %s:%f\n",YellowPtr->Name,YellowPtr->time_taken);
-    //         printf("Time taken by %s:%f\n",Redptr->Name,Redptr->time_taken);
-    //         printf(" CONGRATULATIONS %s, you won!!!", Redptr->Name);
-    //     }
-    //     else{
-    //         printf(" CONGRATULATIONS %s, you won!!!\n", YellowPtr->Name);
-    //         printf("Time taken by %s:%f\n",YellowPtr->Name,YellowPtr->time_taken);
-    //         printf("Time taken by %s:%f",Redptr->Name,Redptr->time_taken);
-    //     }
-    // }
-
-
-
-
-
-    //if(SinglePlayer)
-
-
     initializeBoard(board);
 
     int column;
@@ -458,6 +324,123 @@ void Connect4(int **board, char input[100])
     struct Player *Redptr;
     struct Player *YellowPtr;
 
+
+    int a;
+    printf("Enter 1 for Single Player, 2 for Two Players\n");
+
+    scanf("%d",&a);
+
+    if(a==2){
+
+
+    printf("Player 1, Enter your name please: ");
+    fgets(Player_1.Name,40,stdin);
+
+    //fgets adds "\n" to the end of the name so it gets printed with it, to solve it
+    //we adapted this piece of code from https://stackoverflow.com/questions/2693776/removing-trailing-newline-character-from-fgets-input#:~:text=Replacing%20a%20%5Cn%20with%20a,of%20%22removing%22%20the%20newline.
+    Player_1.Name[strcspn(Player_1.Name, "\n")] = 0;
+
+    printf("\n");
+
+    printf("Player 2, Enter your name please: ");
+    fgets(Player_2.Name,40,stdin);
+    Player_2.Name[strcspn(Player_2.Name, "\n")] = 0;
+    printf("We will toss a coin to see who's lucky to start!\n");
+
+    Sleep(2000);//let them wait, just for fun :)
+
+    int who_starts=CoinToss();
+
+    if (who_starts==1){         //Actually we are not tossing a coin to see who starts, we actually toss a coin to see who is the red player (Player with insert number 1) 
+        Player_1.Color='R';     //and the red player always starts.
+        Player_2.Color='Y';
+        Redptr=&Player_1;
+        YellowPtr=&Player_2;
+        printf("%s was lucky enough to start!\n",Player_1.Name);
+    }
+    else 
+    {
+        Player_2.Color='R';
+        Player_1.Color='Y';
+        Redptr=&Player_2;
+        YellowPtr=&Player_1;
+        printf("%s was lucky enough to start!\n",Player_2.Name);
+    }
+
+    while (k<42){
+
+    printf("%s , Enter a number between 1 and 7: ",Redptr->Name);
+
+    start_t=clock();
+    fgets(input,100,stdin);
+    while (valid_And_Legal(input,board)==0){
+
+        fgets(input,100,stdin);
+    
+    }
+    column=input[0]-'0'; //"input" is a char array, so we convert to int.
+    end_t=clock();
+    Redptr->time_taken += ((double)(end_t - start_t))/CLOCKS_PER_SEC;//This increments Red's timer.
+    updateBoard(column,board,'R');
+    printBoard(board);
+
+    //Check if the game is over here.
+    //k>5 because no one would have won before 7 tries (before incrementation).
+     if(k>5){
+        if(isOver(board,column-1)>0){
+            printf(" CONGRATULATIONS %s, you won!!!\n", Redptr->Name);
+            break;
+        }
+     }
+
+    k++;
+
+    printf("%s , Enter a number between 1 and 7: ",YellowPtr->Name);
+
+    start_t=clock();
+    fgets(input,100,stdin);
+    while (valid_And_Legal(input,board)==0){
+
+        fgets(input,100,stdin);
+    
+    }
+
+    column=input[0]-'0'; //"input" is a char array, so we convert to int.
+    end_t=clock();
+    YellowPtr->time_taken = YellowPtr->time_taken + ((double)(end_t - start_t))/CLOCKS_PER_SEC;//This increments Yellow's timer.
+    updateBoard(column,board,'Y');
+    printBoard(board);
+
+    //Check if the game is Over here.
+     if(k>5){
+        if(isOver(board,column-1)>0){
+            printf(" CONGRATULATIONS %s, you won!!!\n", YellowPtr->Name);
+            break;
+        }
+     }
+
+    k++;
+
+    }
+
+    if(k==42){
+        if(Redptr->time_taken < YellowPtr-> time_taken){
+            printf("Time taken by %s:%f\n",YellowPtr->Name,YellowPtr->time_taken);
+            printf("Time taken by %s:%f\n",Redptr->Name,Redptr->time_taken);
+            printf(" CONGRATULATIONS %s, you won!!!", Redptr->Name);
+        }
+        else{
+            printf(" CONGRATULATIONS %s, you won!!!\n", YellowPtr->Name);
+            printf("Time taken by %s:%f\n",YellowPtr->Name,YellowPtr->time_taken);
+            printf("Time taken by %s:%f",Redptr->Name,Redptr->time_taken);
+        }
+    }
+
+    }
+
+
+
+    if(a==1){
     printf("Player 1, Enter your name please: ");
     fgets(Player_1.Name,40,stdin);
 
@@ -598,6 +581,8 @@ void Connect4(int **board, char input[100])
             printf("Time taken by %s:%f\n",YellowPtr->Name,YellowPtr->time_taken);
             printf("Time taken by %s:%f",Redptr->Name,Redptr->time_taken);
         }
+    }
+    
     }
 
 }
