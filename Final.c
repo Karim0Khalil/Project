@@ -191,23 +191,23 @@ int CoinToss()
 
 int AIPIECE;
 int PlayerPiece;
-int *minimax(int **board, int depth, long long int alpha,long long int beta, int Player, int columnPlayed)
+ int *minimax(int **board, int depth, int alpha, int beta, int Player, int columnPlayed)
 {
     int *validLocations = GetValidLocations(board);
-    long long int *play = (long long int *)malloc(2 * sizeof(long long int));
+    int *play = ( int *)malloc(2 * sizeof( int));
     if (columnPlayed != -1)
     {
         int Who_won = isOver(board, columnPlayed);
         if ((Who_won == 1 && AIPIECE==1) || (Who_won == -1 && AIPIECE == 2) == 1)
         {
             play[0] = columnPlayed;
-            play[1] = 10000000;
+            play[1] = 10000;
             return play;
         }
         else if ((Who_won == 1 && AIPIECE==2) || (Who_won == -1 && AIPIECE == 1) == 1)
         {
             play[0] = columnPlayed;
-            play[1] = -10000000;
+            play[1] = -10000;
             return play;
         }
         else if (NumberOfValidPositions(validLocations) == 0)
@@ -227,7 +227,7 @@ int *minimax(int **board, int depth, long long int alpha,long long int beta, int
     {
         if (Player == 1)
         {
-            long long int value = -INFINITY;
+            long long int value = -9999999;
             int column = 0;
             int SAVE_COL;
             for (int col = 0; col < 7; col++)
@@ -245,7 +245,7 @@ int *minimax(int **board, int depth, long long int alpha,long long int beta, int
 
                 free(validLocations);
 
-                int *new_score = minimax(copy_b, depth - 1, alpha, beta, 0, SAVE_COL);
+                long long int *new_score = minimax(copy_b, depth - 1, alpha, beta, 0, SAVE_COL);
                 if (new_score[1] > value)
                 {
                     value = new_score[1];
@@ -253,7 +253,7 @@ int *minimax(int **board, int depth, long long int alpha,long long int beta, int
                     play[0] = column;
                     play[1] = value;
                 }
-                if (value >= alpha)
+                if (value > alpha)
                     alpha = value;
                 if (alpha >= beta)
                     break;
@@ -262,7 +262,7 @@ int *minimax(int **board, int depth, long long int alpha,long long int beta, int
         }
         else
         {
-            long long int value = 999999999999;
+             int value = 9999999;
             int column = 0;
             int SAVE_COL;
             for (int col = 0; col < 7; col++)
@@ -278,7 +278,7 @@ int *minimax(int **board, int depth, long long int alpha,long long int beta, int
 
                 free(validLocations);
                 updateBoard(SAVE_COL+1, copy_b, PlayerPiece);
-                int *new_score = minimax(copy_b, depth - 1, alpha, beta, 1, SAVE_COL);
+                long long int *new_score = minimax(copy_b, depth - 1, alpha, beta, 1, SAVE_COL);
                 if (new_score[1] < value)
                 {
                     value = new_score[1];
@@ -532,9 +532,10 @@ void Connect4(int **board, char input[100])
 
             else
             {
-                int *min_max=minimax(board,3,-INFINITY,INFINITY,1,-1);
+                int *min_max=minimax(board,3,-9999999,9999999,1,-1);
                 column=min_max[0]+1;
                 updateBoard(column,board,1);
+                free(min_max);
             }
 
             end_t=clock();
@@ -579,9 +580,10 @@ void Connect4(int **board, char input[100])
 
 
             else {
-                int *min_max=minimax(board,3,-INFINITY,INFINITY,1,-1);
+                int *min_max=minimax(board,3,-9999999,9999999,1,-1);
                 column=min_max[0]+1;
                 updateBoard(column,board,2);
+                free(min_max);
             }
 
 
@@ -660,4 +662,16 @@ int main()
     }
     char arr[100];
     // Connect4(board, arr);
+    initializeBoard(board);
+    updateBoard(2,board,1);
+    updateBoard(2,board,1);
+    updateBoard(2,board,1);
+    updateBoard(2,board,1);
+    updateBoard(2,board,1);
+    updateBoard(2,board,1);
+    updateBoard(2,board,1);
+    int *valLoc=GetValidLocations(board);
+    for (int i=0;i<7;i++){
+        printf("%d   ",valLoc[i]);
+    }
 }
