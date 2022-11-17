@@ -77,7 +77,6 @@ In this case the player who spent less time during his turns wins the game.
 #include <time.h>
 #include <Windows.h>
 #include "CheckWin.c"
-#include <math.h>
 
 struct Player
 {
@@ -96,7 +95,7 @@ void initializeBoard(int **board){
     {
         for (j = 0; j < 7; j++)
         {
-            board[i][j] = 0;
+            *(*(board+i)+j) = 0;
         }
     }
 }
@@ -131,7 +130,7 @@ and the column is not full, else it returns false.
 bool valid_And_Legal(char input[100], int **board)
 {
     // Because this is a char array, we need to convert from ascii to int.
-    int column = input[0] - '0';
+    int column = *input - '0';
     if ((strlen(input) > 2) || (column < 1 || column > 7) == 1)
     {
 
@@ -200,7 +199,7 @@ int Random_Valid_Location(int *ValidLocations)
         j++;
         }
     }
-    int randomindex=rand()%7;
+    int randomindex=(rand()%((7-j+1)))+j;
     int random_valid_loc=valid_indeces[randomindex];
     return random_valid_loc;
 }
@@ -217,26 +216,26 @@ int PlayerPiece;
         int Who_won = isOver(board, columnPlayed);
         if ((Who_won == 1 && AIPIECE==1) || (Who_won == -1 && AIPIECE == 2) == 1)
         {
-            play[0] = columnPlayed;
-            play[1] = 10000;
+            *play = columnPlayed;
+            *(play+1) = 10000;
             return play;
         }
         else if ((Who_won == 1 && AIPIECE==2) || (Who_won == -1 && AIPIECE == 1) == 1)
         {
-            play[0] = columnPlayed;
-            play[1] = -10000;
+            *play = columnPlayed;
+            *(play+1) = -10000;
             return play;
         }
         else if (NumberOfValidPositions(validLocations) == 0)
         {
-            play[0] = columnPlayed;
-            play[1] = 0;
+            *play = columnPlayed;
+            *(play+1) = 0;
             return play;
         }
         else
         {
-            play[0] = columnPlayed;
-            play[1]=scoreposition(board,AIPIECE);
+            *play = columnPlayed;
+            *(play+1)=scoreposition(board,AIPIECE);
             return play;
         }
     }
@@ -249,26 +248,26 @@ int PlayerPiece;
             int SAVE_COL;
             for (int col = 0; col < 7; col++)
             {
-                if (validLocations[col] == -1)
+                if (*(validLocations+col) == -1)
                 {
                     continue;
                 }
                 // int row = nextopenRow(board, validLocations[col]);
                 int **copy_b = copyFunction(board);
 
-                SAVE_COL=validLocations[col];
+                SAVE_COL=*(validLocations+col);
 
                 updateBoard(SAVE_COL+1, copy_b, AIPIECE);
 
                 free(validLocations);
 
                 int *new_score = minimax(copy_b, depth - 1, alpha, beta, 0, SAVE_COL);
-                if (new_score[1] > value)
+                if (*(new_score+1) > value)
                 {
-                    value = new_score[1];
+                    value = *(new_score+1);
                     column = SAVE_COL;
-                    play[0] = column;
-                    play[1] = value;
+                    *play = column;
+                    *(play+1) = value;
                 }
                 if (value > alpha)
                     alpha = value;
@@ -284,24 +283,24 @@ int PlayerPiece;
             int SAVE_COL;
             for (int col = 0; col < 7; col++)
             {
-                if (validLocations[col] == -1)
+                if (*(validLocations+col) == -1)
                 {
                     continue;
                 }
                 // int row = nextopenRow(board, validLocations[col]);
                 int **copy_b = copyFunction(board);
 
-                SAVE_COL=validLocations[col];
+                SAVE_COL=*(validLocations+col);
 
                 free(validLocations);
                 updateBoard(SAVE_COL+1, copy_b, PlayerPiece);
                 int *new_score = minimax(copy_b, depth - 1, alpha, beta, 1, SAVE_COL);
-                if (new_score[1] < value)
+                if (*(new_score+1) < value)
                 {
-                    value = new_score[1];
+                    value = *(new_score+1);
                     column = SAVE_COL;
-                    play[0] = column;
-                    play[1] = value;
+                    *play = column;
+                    *(play+1) = value;
                 }
                 if (value < beta)
                     beta = value;
@@ -363,7 +362,7 @@ void Connect4(int **board, char input[100])
         Player_2.Name[strcspn(Player_2.Name, "\n")] = 0;
         printf("We will toss a coin to see who's lucky to start!\n");
 
-        Sleep(1000);//let them wait, just for fun :)
+        Sleep(1000);//let them wait, just for fun 🙂
 
         int who_starts=CoinToss();
 
@@ -493,14 +492,14 @@ void Connect4(int **board, char input[100])
         
         printf("We will toss a coin to see who's lucky to start!\n");
 
-        Sleep(1000);//let them wait, just for fun :)
+        Sleep(1000);//let them wait, just for fun 🙂
 
         int who_starts=CoinToss();
 
 
 
 
-        Sleep(1000);//let them wait, just for fun :)
+        Sleep(1000);//let them wait, just for fun 🙂
 
         if (who_starts==1){         //Actually we are not tossing a coin to see who starts, we actually toss a coin to see who is the red player (Player with insert number 1)
             Player_1.Color='R';     //and the red player always starts.
@@ -672,7 +671,7 @@ int make_move_KCGH_CODES(int **board){
 int main()
 {
     int **board;
-    board = (int **)malloc(sizeof(int *)* 6);
+    board = (int *)malloc(sizeof(int *) *6);
     for (int i = 0; i < 6; i++)
     {
         board[i] = (int*)malloc(sizeof(int) * 7);
