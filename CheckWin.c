@@ -1,16 +1,34 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
-//void print_Array(int**);
-//int isOver(int**, int);
-//int findRow(int** , int column);
-//int checkVertically(int**, int row, int column, int size);
-//int checkHorizontally(int**, int row, int column, int size);
-//int checkDiagonally_1(int**, int row, int column, int size);
 
+/*
 
-// requires: the board, the column that was last played at, an whose turn it was
-// effects: returns the row that was played at
+This file contains the following functions:
+
+int isOver(int**, int);
+int findRow(int** , int column);
+int checkVertically(int**, int row, int column, int size);
+int checkHorizontally(int**, int row, int column, int size);
+int checkDiagonally_1(int**, int row, int column, int size);
+int checkDiagonally_2(int **array, int row, int column, int input);
+int isOver(int **array, int column);
+int nextopenRow(int **board, int column);
+int *GetValidLocations(int **board);
+int CountWindow(int window[], int size, int piece);
+int evauluate_window(int window[], int size, int piece);
+int **copyFunction(int **board);
+int scoreposition(int **board, int piece);
+
+*/
+
+/*
+    int findRow(int **array, int column)
+
+    requires: the board, the column that was last played at, an whose turn it was
+    effects: returns the row that was played at
+*/
+
 int findRow(int **array, int column)
 {
     int i = 0;
@@ -28,8 +46,12 @@ int findRow(int **array, int column)
     return row;
 }
 
-// requires: the board, column and row that the last turn was played at, and whose turn it was
-// effects: return 1 if there is any win at the row the last turn was played at
+/*
+    int checkVertically(int **array, int row, int column, int input)
+
+    requires: the board, column and row that the last turn was played at, and whose turn it was
+    effects: return 1 if there is any win at the row the last turn was played at
+*/
 int checkVertically(int **array, int row, int column, int input)
 {
     int i = 0;
@@ -54,8 +76,13 @@ int checkVertically(int **array, int row, int column, int input)
     return 0;
 }
 
-// requires: the board, column and row that the last turn was played at, and whose turn it was
-// effects: return 1 if there is any win at the column the last turn was played at
+/*
+    int checkHorizontally(int **array, int row, int column, int input)
+
+    requires: the board, column and row that the last turn was played at, and whose turn it was
+    effects: return 1 if there is any win at the column the last turn was played at
+*/
+
 int checkHorizontally(int **array, int row, int column, int input)
 {
     int i = 0;
@@ -80,8 +107,13 @@ int checkHorizontally(int **array, int row, int column, int input)
     return 0;
 }
 
-// requires: the board, column and row that the last turn was played at, and whose turn it was
-// effects: return 1 if there is any win at the diagonal to the right the last turn was played at
+/*
+    int checkDiagonally_1(int **array, int row, int column, int input)
+
+     requires: the board, column and row that the last turn was played at, and whose turn it was
+     effects: return 1 if there is any win at the diagonal to the right the last turn was played at
+*/
+
 int checkDiagonally_1(int **array, int row, int column, int input)
 {
     int diagonal[6] = {-1, -1, -1, -1, -1, -1};
@@ -120,8 +152,13 @@ int checkDiagonally_1(int **array, int row, int column, int input)
     return 0;
 }
 
-// requires: the board, column and row that the last turn was played at, and whose turn it was
-// effects: return 1 if there is any win at the diagonal to the left the last turn was played at
+/*
+    int checkDiagonally_2(int **array, int row, int column, int input)
+
+    requires: the board, column and row that the last turn was played at, and whose turn it was
+    effects: return 1 if there is any win at the diagonal to the left the last turn was played at
+*/
+ 
 int checkDiagonally_2(int **array, int row, int column, int input)
 {
     int diagonal[6] = {-1, -1, -1, -1, -1, -1};
@@ -147,7 +184,8 @@ int checkDiagonally_2(int **array, int row, int column, int input)
     {
         for (j; j < 4; j++)
         {
-            if (diagonal[j + i] == input) // checks that if there is a win, the win must be from one player only
+            // checks that if there is a win, the win must be from one player only
+            if (diagonal[j + i] == input) 
                 streak++;
         }
         if (streak == 4)
@@ -160,10 +198,11 @@ int checkDiagonally_2(int **array, int row, int column, int input)
 
 /*
  * int isOver(int array[6][7], int column)
+ *
  * requires: The column in which has last inserted.
  * effects: Returns if the user's last move allows him to win by returning an integer >0; else it returns 0.
  * It calls 5 functions, such that each function checks vertically or horizontally and two functions to check the 2 diagonals.
- *
+ * 
  */
 int isOver(int **array, int column)
 {
@@ -183,11 +222,15 @@ int isOver(int **array, int column)
     else if (result > 0 && input == 2)
         return -1;
 }
-/*Requires: An int** board argument(2D array) , and an integer argument which is a column(values allowed btwn 0-6)
-Effects: Returns the first valid row where the player can place the peice at the given column
+/*
+int nextopenRow(int **board, int column)
+
+Requires: An int** board argument(2D array) , and an integer argument which is a column(values allowed btwn 0-6)
+Effects: Returns the first valid row where the player can place the peice at the given column.
+
 Testing: 2 Sufficeint test cases:
-1-
- Given a board allocated dynamically with malloc, given the column where we need to check at what row position can we place:
+
+1-Given a board allocated dynamically with malloc, given the column where we need to check at what row position can we place:
 example of board: consider: {
 	 {2,1,1,2,2,1,0}
 	,{2,1,1,2,2,1,2}
@@ -197,6 +240,7 @@ example of board: consider: {
 	 {2,1,1,2,2,1,2}
 	 };
 	nextopenRow(board,6) will output 0;
+
 2-Given an empty array we must get row 0, since no player has played yet
 example: 
 	 {0,0,0,0,0,0,0}
@@ -214,17 +258,24 @@ int nextopenRow(int **board, int column)
 		if (board[i][column] == 0)
 			return i;
 }
-/*Requires: The 2D array board with 6 rows and 7 columns
+/*
+int *GetValidLocations(int **board)
+
+Requires: The 2D array board with 6 rows and 7 columns
 Effects: Returns a 1D array with the valid locations(meaning the column is valid to make 
 a move in) of the numbered columns in the board, -1 otherwise. 
-*/
-/*Test cases: 1- If given a valid input the functions performs its operations correctly.
+
+
+Test cases: 
+1- If given a valid input the functions performs its operations correctly.
 given an 2Darray(gameboard)
 int gameboard[6][7] = {{0,0,0,0,0,0,0},{0,0,0,0,0,0,0},{0,0,0,0,0,0,0},{0,0,0,0,0,0,0},{0,0,0,2,0,0,0},{0,1,1,1,2,2,0}};
 The functions returns a 1D array with the number of the columns that are valid to make a move in.(columns are 0 indexed).
 Output: {0,1,2,3,4,5,6};
+
 2- int gameboard[6][7] = {{1,0,0,0,0,0,0},{2,0,0,0,0,0,0},{1,0,0,0,0,0,0},{2,0,0,0,0,0,0},{1,0,0,2,0,0,0},{2,1,1,1,2,2,0}};
 Output: {1,0,0,0,0,0,0}
+
 This function will always output the correct result since we are always giving it a fixed sized board with valid arguments
 in our function calls.
 */
@@ -242,12 +293,18 @@ int *GetValidLocations(int **board)
     }
     return arr;
 }
-/*Requires: A 1D array of size 4, size of the given 1D array(as an integer) which is 4, and an integer named piece which can
+/*
+
+int CountWindow(int window[], int size, int piece)
+
+Requires: A 1D array of size 4, size of the given 1D array(as an integer) which is 4, and an integer named piece which can
 have the values 1 or 2.
 Effects:Returns the number of times piece is found in the window array
+
 Simple Testing case:
 window = {1,2,1,2};
 CountWindow(window,4,2) will ouput 2. 
+
 The algorithm is clear and is always guranteed to output the correct answer.
 */
 int CountWindow(int window[], int size, int piece)
@@ -262,24 +319,34 @@ int CountWindow(int window[], int size, int piece)
     }
     return count;
 }
-/*Requires: A 1D array of size 4, size of the given 1D array(as an integer) which is 4, and an integer named piece which can
+
+/*
+int evauluate_window(int window[], int size, int piece)
+
+Requires: A 1D array of size 4, size of the given 1D array(as an integer) which is 4, and an integer named piece which can
 have the values 1 or 2.
+
 Effects: Returns a value which is named as score which is used to in other functions namely the minimax function(check minimax function
 for details.)This value evaluates the given window based on the elements contained in the window.
+
 Testing Cases: Given a window of size 4:
 1-window{1,1,1,1}
  evauluate_window(int window[], 4, 1) will output score 100 which is correct.
+
 2-window{1,1,0,1};
  evauluate_window(int window[], 4, 1) will output score 5 which is correct.
- 3-window{1,1,0,0}
+
+3-window{1,1,0,0}
  evauluate_window(int window[], 4, 1) will output score 2 which is correct.
- 4-window{2,0,2,2}
+
+4-window{2,0,2,2}
 evauluate_window(int window[], 4, 1) will output score -4 which is correct.
 
 If peices 1 and 2 are found in the array, the score won't be updated.
 
- Permutations of the list won't effect the algorithm, since we assume that the CountWindow function is implemented correclty and tested and
- it is used in our evaluating window function.
+Permutations of the list won't effect the algorithm, since we assume that the CountWindow function is implemented correclty and tested and
+it is used in our evaluating window function.
+
 These are the 4 cases that can be experimented, otherwise if for example we enter a negative number, the function will eventaully return
 0 score. Enterting wrong arguments is the fault of the client, since we specified in the precondition that the piece entered must be 1 or 2.
 */
@@ -309,8 +376,12 @@ int evauluate_window(int window[], int size, int piece)
     }
     return score;
 }
-/*Requires: A 2D array board of 6 rows and 7 columns. 
+/*
+int **copyFunction(int **board)
+
+Requires: A 2D array board of 6 rows and 7 columns. 
 Effects: Returns a double pointer which refers to the address of a copy of the given board which is a 2D array.
+
 Testing: given the board[6][7] by:
 	{
 	 {2,1,1,2,2,1,0}
@@ -349,12 +420,19 @@ int **copyFunction(int **board)
     }
     return copy;
 }
-/*Requires: A 2D array which is the board of 6 rows and 7 columns and an integer piece argument piece which can have the value of 1 or 2
+/*
+int scoreposition(int **board, int piece)
+
+Requires: A 2D array which is the board of 6 rows and 7 columns and an integer piece argument piece which can have the value of 1 or 2.
+
 Effects: Returns a given score , using the evaluate window functions for rows,columns, left and right diagonals. 
+
 Testing Cases: The function int scoreposition(int board[6][7], int piece) uses the help of the function evaluate position which we assume
 it is correct. 
+
 The function will give us the combinations of all the rows and columns, and diagonals in a 1D array.
 Note: we tested each function call seperately and it resulted in outputing correct answers.
+
 1-For even entries: 
 scorepostion(gameboard,1); && scorepostion(gameboard,2);
  int gameboard[6][7] = {
@@ -366,6 +444,7 @@ scorepostion(gameboard,1); && scorepostion(gameboard,2);
 	 {2,1,1,2,2,1,2}
 	 };
  gave us the correct output.
+
  2-For odd entries:
  scorepostion(gameboard,1) && scorepostion(gameboard,2);
 	 int gameboard[6][7] = {
@@ -377,6 +456,7 @@ scorepostion(gameboard,1); && scorepostion(gameboard,2);
 	 {2,1,1,2,2,1,2}
 	 };
 	gave us the correct output.
+
 3- For 42 entries(meaning the board is empty)
 	scorepostion(gameboard,1) && scorepostion(gameboard,2);
 	int gameboard[6][7]=
@@ -466,11 +546,18 @@ int scoreposition(int **board, int piece)
     }
 
     return score;
-}/*Requires: An array pointer
+}/*
+
+int NumberOfValidPositions(int *ValidPositions)
+
+Requires: An array pointer.
+
 Effects: Returns an integer namely size which counts the number of valid positions(if index at i !=-1)
+
 Testing cases:
 1-array with all zero's will return 0, since no valid positions initially.
 2-array with -1's will output the correct output which is the number of -1 found in the array.
+
 Manual Example:
 int *Valid = int*(malloc(sizeof(int))7);
 for(int i=0;i<7;++i)
@@ -491,103 +578,3 @@ int NumberOfValidPositions(int *ValidPositions)
 int AI = 1;
 int player = 2;
 
-// int maximizingplayer = 1;
-// int minimizingplayer = 2;
-// int *minimax(int board[6][7], int depth, double alpha, double beta, int Player, int columnPlayed)
-// {
-// 	int *validLocations = GetValidLocations(board);
-// 	int *play =(int*) malloc(2 * sizeof(int));
-// 	if (columnPlayed != -1)
-// 	{
-// 		int Who_won = isOver(board, columnPlayed);
-// 		if (Who_won == 1)
-// 		{
-// 			play[0] = NULL;
-// 			play[1] = 10000000;
-// 			return play;
-// 		}
-// 		else if (Who_won == -1)
-// 		{
-// 			play[0] = NULL;
-// 			play[1] = -10000000;
-// 			return play;
-// 		}
-// 		else if (NumberOfValidPositions(validLocations) == 0)
-// 		{
-// 			play[0] = NULL;
-// 			play[1] = 0;
-// 		}
-// 		else
-// 		{
-// 			play[0] = NULL;
-// 			play[1] = scoreposition(board, AI);
-// 			return play;
-// 		}
-// 	}
-// 	else
-// 	{
-// 		if (Player == maximizingplayer)
-// 		{
-// 			long long int value = -999999999999;
-// 			int column = 0;
-// 			for (int col = 0; col < 7; col++)
-// 			{
-// 				if (validLocations[col] == -1)
-// 				{
-// 					continue;
-// 				}
-// 				int row = nextopenRow(board, validLocations[col]);
-// 				int **copy_b = copyFunction(board);
-// 				updateBoard(validLocations[col], copy_b, 'R');
-// 				int new_score = minimax(copy_b, depth - 1, alpha, beta, player, validLocations[col]);
-// 				if (new_score > value)
-// 				{
-// 					value = new_score;
-// 					column = validLocations[col];
-// 				}
-// 				if (value >= alpha)
-// 					alpha = value;
-// 				if (alpha >= beta)
-// 					break;
-// 				play[0] = column;
-// 				play[1] = value;
-
-// 				return play;
-// 			}
-// 		}
-// 		else
-// 		{
-// 			long long int value = 999999999999;
-// 			int column = 0;
-// 			for (int col = 0; col < 7; col++)
-// 			{
-// 				if (validLocations[col] == -1)
-// 				{
-// 					continue;
-// 				}
-// 				int row = nextopenRow(board, validLocations[col]);
-// 				int **copy_b = copyFunction(board);
-// 				updateBoard(validLocations[col], copy_b, 'L');
-// 				int new_score = minimax(copy_b, depth - 1, alpha, beta, AI, validLocations[col]);
-// 				if (new_score > value)
-// 				{
-// 					value = new_score;
-// 					column = validLocations[col];
-// 				}
-// 				if (value <= beta)
-// 					beta = value;
-// 				if (beta <= alpha)
-// 					break;
-// 				play[0] = column;
-// 				play[1] = value;
-
-// 				return play;
-// 			}
-// 		}
-// 	}
-// }
-
-// int main(){
-// 	int testboard[6][7] = {{0,0,0,0,0,0,0},{0,0,0,0,0,0,0},{0,0,0,0,0,0,0},{0,0,0,0,0,0,0},{0,0,0,2,0,0,0},{0,1,1,1,2,2,0}};
-// 	printf("%d", minimax(testboard,5,-INFINITY,INFINITY,AI,2));
-// }
