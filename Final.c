@@ -292,7 +292,7 @@ int PlayerPiece;
 
                 SAVE_COL=*(validLocations+col);
 
-                free(validLocations);
+                
                 updateBoard(SAVE_COL+1, copy_b, PlayerPiece);
                 int *new_score = minimax(copy_b, depth - 1, alpha, beta, 1, SAVE_COL);
                 if (*(new_score+1) < value)
@@ -308,6 +308,7 @@ int PlayerPiece;
                     break;
 
             }
+            free(validLocations);
             return play;
         }
     }
