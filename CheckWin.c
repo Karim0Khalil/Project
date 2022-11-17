@@ -8,10 +8,10 @@ This file contains the following functions:
 
 int isOver(int**, int);
 int findRow(int** , int column);
-int checkVertically(int**, int row, int column, int size);
-int checkHorizontally(int**, int row, int column, int size);
-int checkDiagonally_1(int**, int row, int column, int size);
-int checkDiagonally_2(int **array, int row, int column, int input);
+int checkVertically(int [6][7], int row, int column, int size);
+int checkHorizontally(int[6][7], int row, int column, int size);
+int checkDiagonally_1(int[6][7], int row, int column, int size);
+int checkDiagonally_2(int [6][7], int row, int column, int input);
 int isOver(int **array, int column);
 int nextopenRow(int **board, int column);
 int *GetValidLocations(int **board);
@@ -47,44 +47,48 @@ int findRow(int **array, int column)
 }
 
 /*
-    int checkVertically(int **array, int row, int column, int input)
+    int checkVertically(int array[6][7], int row, int column, int input)
 
     requires: the board, column and row that the last turn was played at, and whose turn it was
     effects: return 1 if there is any win at the row the last turn was played at
 */
-int checkVertically(int **array, int row, int column, int input)
+int checkVertically(int array[6][7], int row, int column, int input)
+
 {
+    
     int i = 0;
     int j = i;
     int streak = 0;
 
-    while (5 - i >= 3) // there are 3 possible wins at each horizontal level
-    {
-        for (j; j < 4 + i; j++)
-        {
-            if (array[j][column] == input) // checks that if there is a win, the win must be from one player only
-                streak++;
-        }
+   	while (5 - i >= 3)   //there are 3 possible wins at each horizontal level
+	{
+		for (j; j < 4+i; j++)
+		{
+			if (array[j][column] == input)  //checks that if there is a win, the win must be from one player only
+				streak++;
+		}
 
-        if (streak == 4)
-            return 1;
+		if (streak == 4)
+			return 1;
 
-        i++;
-        j = i;
-        streak = 0;
-    }
-    return 0;
+		i++;
+		j = i;
+		streak = 0;
+
+	}
+	return 0;
 }
 
 /*
-    int checkHorizontally(int **array, int row, int column, int input)
+    int checkHorizontally(int array[6][7], int row, int column, int input)
 
     requires: the board, column and row that the last turn was played at, and whose turn it was
     effects: return 1 if there is any win at the column the last turn was played at
 */
 
-int checkHorizontally(int **array, int row, int column, int input)
+int checkHorizontally(int array[6][7], int row, int column, int input)
 {
+
     int i = 0;
     int j = i;
     int streak = 0;
@@ -108,92 +112,89 @@ int checkHorizontally(int **array, int row, int column, int input)
 }
 
 /*
-    int checkDiagonally_1(int **array, int row, int column, int input)
+     int checkDiagonally_1(int array[6][7], int row, int column, int input)
 
      requires: the board, column and row that the last turn was played at, and whose turn it was
      effects: return 1 if there is any win at the diagonal to the right the last turn was played at
 */
 
-int checkDiagonally_1(int **array, int row, int column, int input)
+int checkDiagonally_1(int array[6][7], int row, int column, int input)
 {
-    int diagonal[6] = {-1, -1, -1, -1, -1, -1};
-    int i = 0;
 
-    while (row <= 5 && column > 0)
-    {
-        row++;
-        column--;
-    }
+   int diagonal[6] = { -1,-1,-1,-1,-1,-1 };
+   int i = 0;
+	
+	while (row <= 5 && column>0)
+	{
+		row++;
+		column--;
+	}
 
-    while (row >= 0 && column <= 6)
-    {
-        diagonal[i] = (int)(*(array+row)+column);
-        row-=1;
-        column+=1;
-        i++;
-    }
+	while (row >= 0 && column <= 6)
+	{
+		diagonal[i] = array[row--][column++];
+		i++;
+	}
 
-    i = 0;
-    int j = 0;
-    int streak = 0;
+	i = 0;
+	int j = 0;
+	int streak = 0;
 
-    for (i; i < 3; i++)
-    {
-        for (j; j < 4; j++)
-        {
-            if (diagonal[j + i] == input) // checks that if there is a win, the win must be from one player only
-                streak++;
-        }
-        if (streak == 4)
-            return 1;
-        j = 0;
-        streak = 0;
-    }
-    return 0;
+	for (i; i < 3; i++)
+	{
+		for (j; j < 4; j++)
+		{
+			if (diagonal[j+i] == input) //checks that if there is a win, the win must be from one player only
+				streak++;
+		}
+		if (streak == 4)
+			return 1;
+		j = 0;
+		streak = 0;
+	}
+	return 0;
 }
 
 /*
-    int checkDiagonally_2(int **array, int row, int column, int input)
+    int checkDiagonally_2(int array[6][7], int row, int column, int input)
 
     requires: the board, column and row that the last turn was played at, and whose turn it was
     effects: return 1 if there is any win at the diagonal to the left the last turn was played at
 */
  
-int checkDiagonally_2(int **array, int row, int column, int input)
+int checkDiagonally_2(int array[6][7], int row, int column, int input)
 {
-    int diagonal[6] = {-1, -1, -1, -1, -1, -1};
-    int i = 0;
+   
+    int diagonal[6] = { -1,-1,-1,-1,-1,-1 };
+	int i = 0;
 
-    while (row < 5 && column > 0)
-    {
-        row++;
-        column++;
-    }
-    while (row >= 0 && column <= 6)
-    {
-        diagonal[i] = (int)(*(array+row)+column);
-        row-=1;
-        column+=1;
-        i++;
-    }
-    i = 0;
-    int j = 0;
-    int streak = 0;
+	while (row < 5 && column > 0)
+	{
+		row++;
+		column++;
+	}
+	while (row >= 0 && column <= 6)
+	{
+		diagonal[i] = array[row--][column--];
+		i++;
+	}
+	i = 0;
+	int j = 0;
+	int streak = 0;
 
-    for (i; i < 3; i++)
-    {
-        for (j; j < 4; j++)
-        {
-            // checks that if there is a win, the win must be from one player only
-            if (diagonal[j + i] == input) 
-                streak++;
-        }
-        if (streak == 4)
-            return 1;
-        j = 0;
-        streak = 0;
-    }
-    return 0;
+	for (i; i < 3; i++)
+	{
+		for (j; j < 4; j++)
+		{
+			if (diagonal[j + i] == input) //checks that if there is a win, the win must be from one player only
+				streak++;
+		}
+		if (streak == 4)
+			return 1;
+		j = 0;
+		streak = 0;
+	}
+	return 0;
 }
 
 /*
@@ -204,11 +205,22 @@ int checkDiagonally_2(int **array, int row, int column, int input)
  * It calls 5 functions, such that each function checks vertically or horizontally and two functions to check the 2 diagonals.
  * 
  */
-int isOver(int **array, int column)
+int isOver(int **board, int column)
 {
     int columns = 7;
     int rows = 6;
-    int row = findRow(array, column);
+    int row = findRow(board, column);
+
+    int array[6][7];
+
+    for (int i = 0; i < 6; i++)
+    {
+        for (int j = 0; j < 7; j++)
+        {
+            array[i][j] = board[i][j];
+        }
+    }
+
     int input = array[row][column];
 
     int vertical = checkVertically(array, row, column, input);
@@ -217,7 +229,7 @@ int isOver(int **array, int column)
     int diagonal2 = checkDiagonally_2(array, row, column, input);
 
     int result = vertical + horizontal + diagonal1 + diagonal2;
-    if (result > 0&&input==1)
+    if (result > 0 && input==1)
         return 1;
     else if (result > 0 && input == 2)
         return -1;
