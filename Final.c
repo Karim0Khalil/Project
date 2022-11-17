@@ -77,6 +77,7 @@ In this case the player who spent less time during his turns wins the game.
 #include <time.h>
 #include <Windows.h>
 #include "CheckWin.c"
+#include <math.h>
 
 struct Player
 {
@@ -189,10 +190,11 @@ int CoinToss()
 }
 
 int AIPIECE;
-int *minimax(int **board, int depth, double alpha, double beta, int Player, int columnPlayed)
+int PlayerPiece;
+int *minimax(int **board, int depth, long long int alpha,long long int beta, int Player, int columnPlayed)
 {
     int *validLocations = GetValidLocations(board);
-    int *play = (int *)malloc(2 * sizeof(int));
+    long long int *play = (long long int *)malloc(2 * sizeof(long long int));
     if (columnPlayed != -1)
     {
         int Who_won = isOver(board, columnPlayed);
@@ -217,10 +219,7 @@ int *minimax(int **board, int depth, double alpha, double beta, int Player, int 
         else
         {
             play[0] = columnPlayed;
-            if (Player==1)
-                play[1]=scoreposition(board,1);
-            else
-                play[1]=scoreposition(board,2);
+            play[1]=scoreposition(board,AIPIECE);
             return play;
         }
     }
@@ -228,7 +227,7 @@ int *minimax(int **board, int depth, double alpha, double beta, int Player, int 
     {
         if (Player == 1)
         {
-            long long int value = -999999999999;
+            long long int value = -INFINITY;
             int column = 0;
             int SAVE_COL;
             for (int col = 0; col < 7; col++)
@@ -242,7 +241,7 @@ int *minimax(int **board, int depth, double alpha, double beta, int Player, int 
 
                 SAVE_COL=validLocations[col];
 
-                updateBoard(SAVE_COL, copy_b, 1);
+                updateBoard(SAVE_COL+1, copy_b, AIPIECE);
 
                 free(validLocations);
 
@@ -278,7 +277,7 @@ int *minimax(int **board, int depth, double alpha, double beta, int Player, int 
                 SAVE_COL=validLocations[col];
 
                 free(validLocations);
-                updateBoard(SAVE_COL, copy_b, 2);
+                updateBoard(SAVE_COL+1, copy_b, PlayerPiece);
                 int *new_score = minimax(copy_b, depth - 1, alpha, beta, 1, SAVE_COL);
                 if (new_score[1] < value)
                 {
@@ -504,10 +503,14 @@ void Connect4(int **board, char input[100])
 
 
 
-        if(Player_2.Color=='R')
+        if(Player_2.Color=='R'){
             AIPIECE=1;
-        else
+            PlayerPiece=2;
+        }
+        else{
             AIPIECE=2;
+            PlayerPiece=1;
+        }
 
         while (k<42){
 
@@ -524,14 +527,14 @@ void Connect4(int **board, char input[100])
 
                 }
                 column=input[0]-'0'; //"input" is a char array, so we convert to int.
-                updateBoard(column,board,2);
+                updateBoard(column,board,1);
             }
 
             else
             {
-                int *min_max=minimax(board,3,-9999999999,9999999999,1,-1);
+                int *min_max=minimax(board,3,-INFINITY,INFINITY,1,-1);
                 column=min_max[0]+1;
-                updateBoard(column,board,2);
+                updateBoard(column,board,1);
             }
 
             end_t=clock();
@@ -571,14 +574,14 @@ void Connect4(int **board, char input[100])
 
                 column=input[0]-'0'; //"input" is a char array, so we convert to int.
 
-                updateBoard(column,board,1);
+                updateBoard(column,board,2);
             }
 
 
             else {
-                int *min_max=minimax(board,3,-9999999999,9999999999,1,-1);
+                int *min_max=minimax(board,3,-INFINITY,INFINITY,1,-1);
                 column=min_max[0]+1;
-                updateBoard(column,board,1);
+                updateBoard(column,board,2);
             }
 
 
@@ -656,5 +659,5 @@ int main()
         board[i] = (int*)malloc(sizeof(int) * 7);
     }
     char arr[100];
-    Connect4(board, arr);
+    // Connect4(board, arr);
 }
