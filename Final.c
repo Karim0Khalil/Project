@@ -111,14 +111,14 @@ void updateBoard(int column, int **board, int player)
     int i;
     for (i = 5; i >= 0; i--)
     {
-        if (board[i][column - 1] == 0 && player == 1)
+        if (*(*(board+i)+(column - 1)) == 0 && player == 1)
         {
-            board[i][column - 1] = 1;
+            *(*(board+i)+(column - 1)) = 1;
             break;
         }
-        else if (board[i][column - 1] == 0 && player == 2)
+        else if (*(*(board+i)+(column - 1)) == 0 && player == 2)
         {
-            board[i][column - 1] = 2;
+            *(*(board+i)+(column - 1)) = 2;
             break;
         }
     }
@@ -533,7 +533,7 @@ void Connect4(int **board, char input[100])
             else
             {
                 int *min_max=minimax(board,3,-9999999,9999999,1,-1);
-                column=min_max[0]+1;
+                column=*(min_max)+1;
                 updateBoard(column,board,1);
                 free(min_max);
             }
@@ -581,7 +581,7 @@ void Connect4(int **board, char input[100])
 
             else {
                 int *min_max=minimax(board,3,-9999999,9999999,1,-1);
-                column=min_max[0]+1;
+                column=*(min_max)+1;
                 updateBoard(column,board,2);
                 free(min_max);
             }
@@ -661,17 +661,5 @@ int main()
         board[i] = (int*)malloc(sizeof(int) * 7);
     }
     char arr[100];
-    // Connect4(board, arr);
-    initializeBoard(board);
-    updateBoard(2,board,1);
-    updateBoard(2,board,1);
-    updateBoard(2,board,1);
-    updateBoard(2,board,1);
-    updateBoard(2,board,1);
-    updateBoard(2,board,1);
-    updateBoard(2,board,1);
-    int *valLoc=GetValidLocations(board);
-    for (int i=0;i<7;i++){
-        printf("%d   ",valLoc[i]);
-    }
+     Connect4(board, arr);
 }
