@@ -262,6 +262,7 @@ int PlayerPiece;
                 free(validLocations);
 
                 int *new_score = minimax(copy_b, depth - 1, alpha, beta, 0, SAVE_COL);
+                free(copy_b);
                 if (*(new_score+1) > value)
                 {
                     value = *(new_score+1);
@@ -295,6 +296,7 @@ int PlayerPiece;
                 
                 updateBoard(SAVE_COL+1, copy_b, PlayerPiece);
                 int *new_score = minimax(copy_b, depth - 1, alpha, beta, 1, SAVE_COL);
+                free(copy_b);
                 if (*(new_score+1) < value)
                 {
                     value = *(new_score+1);
