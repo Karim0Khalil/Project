@@ -189,6 +189,23 @@ int CoinToss()
     return r;
 }
 
+int Random_Valid_Location(int *ValidLocations)
+{
+    int i;
+    int valid_indeces[7];
+    int j=0;
+    for (i=0;i<7;i++){
+        if (ValidLocations[i]!=-1){
+        valid_indeces[j]=i;
+        j++;
+        }
+    }
+    int randomindex=rand()%7;
+    int random_valid_loc=valid_indeces[randomindex];
+    return random_valid_loc;
+}
+
+
 int AIPIECE;
 int PlayerPiece;
  int *minimax(int **board, int depth, int alpha, int beta, int Player, int columnPlayed)
@@ -227,8 +244,8 @@ int PlayerPiece;
     {
         if (Player == 1)
         {
-            long long int value = -9999999;
-            int column = 0;
+            int value = -9999999;
+            int column = Random_Valid_Location(validLocations);
             int SAVE_COL;
             for (int col = 0; col < 7; col++)
             {
@@ -245,7 +262,7 @@ int PlayerPiece;
 
                 free(validLocations);
 
-                long long int *new_score = minimax(copy_b, depth - 1, alpha, beta, 0, SAVE_COL);
+                int *new_score = minimax(copy_b, depth - 1, alpha, beta, 0, SAVE_COL);
                 if (new_score[1] > value)
                 {
                     value = new_score[1];
@@ -262,8 +279,8 @@ int PlayerPiece;
         }
         else
         {
-             int value = 9999999;
-            int column = 0;
+            int value = 9999999;
+            int column = Random_Valid_Location(validLocations);
             int SAVE_COL;
             for (int col = 0; col < 7; col++)
             {
@@ -278,7 +295,7 @@ int PlayerPiece;
 
                 free(validLocations);
                 updateBoard(SAVE_COL+1, copy_b, PlayerPiece);
-                long long int *new_score = minimax(copy_b, depth - 1, alpha, beta, 1, SAVE_COL);
+                int *new_score = minimax(copy_b, depth - 1, alpha, beta, 1, SAVE_COL);
                 if (new_score[1] < value)
                 {
                     value = new_score[1];
@@ -286,7 +303,7 @@ int PlayerPiece;
                     play[0] = column;
                     play[1] = value;
                 }
-                if (value <= beta)
+                if (value < beta)
                     beta = value;
                 if (beta <= alpha)
                     break;
@@ -532,7 +549,7 @@ void Connect4(int **board, char input[100])
 
             else
             {
-                int *min_max=minimax(board,3,-9999999,9999999,1,-1);
+                int *min_max=minimax(board,5,-9999999,9999999,1,-1);
                 column=*(min_max)+1;
                 updateBoard(column,board,1);
                 free(min_max);
@@ -548,12 +565,12 @@ void Connect4(int **board, char input[100])
             if(k>5){
                 int Who_won=isOver(board,column-1);
                 if((Who_won == 1 && AIPIECE==1) || (Who_won == -1 && AIPIECE == 2) == 1){
-                    printf(" CONGRATULATIONS %s, you won!!!\n", Redptr->Name);
+                    printf(" CONGRATULATIONS Bot, you won!!!\n");
                     break;
                 }
                 else if((Who_won == 1 && AIPIECE==2) || (Who_won == -1 && AIPIECE == 1) == 1)
                     {
-                        printf(" CONGRATULATIONS %s, you won!!!\n", YellowPtr->Name);
+                        printf(" CONGRATULATIONS %s, you won!!!\n", Player_1.Name);
                         break;
                     }
             }
@@ -580,7 +597,7 @@ void Connect4(int **board, char input[100])
 
 
             else {
-                int *min_max=minimax(board,3,-9999999,9999999,1,-1);
+                int *min_max=minimax(board,5,-9999999,9999999,1,-1);
                 column=*(min_max)+1;
                 updateBoard(column,board,2);
                 free(min_max);
@@ -597,12 +614,12 @@ void Connect4(int **board, char input[100])
             if(k>5){
                 int Who_won=isOver(board,column-1);
                 if((Who_won == 1 && AIPIECE==1) || (Who_won == -1 && AIPIECE == 2) == 1){
-                    printf(" CONGRATULATIONS %s, you won!!!\n", Redptr->Name);
+                    printf(" CONGRATULATIONS BOT, you won!!!\n");
                     break;
                 }
                 else if((Who_won == 1 && AIPIECE==2) || (Who_won == -1 && AIPIECE == 1) == 1)
                     {
-                        printf(" CONGRATULATIONS %s, you won!!!\n", YellowPtr->Name);
+                        printf(" CONGRATULATIONS %s, you won!!!\n", Player_1.Name);
                         break;
                     }
             }
