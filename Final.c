@@ -200,7 +200,7 @@ int Random_Valid_Location(int *ValidLocations)
         j++;
         }
     }
-    int randomindex=rand()%7;
+    int randomindex=(rand()%((7-j+1)))+j;
     int random_valid_loc=valid_indeces[randomindex];
     return random_valid_loc;
 }
