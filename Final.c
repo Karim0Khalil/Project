@@ -361,8 +361,7 @@ void Connect4(int **board, char input[100])
     scanf("%d",&a);
     fflush(stdin);
 
-    if(a==2){
-        initializeBoard(board);
+     initializeBoard(board);
 
         int column;
         int k=0;//for the number of tries.
@@ -382,6 +381,8 @@ void Connect4(int **board, char input[100])
         struct Player *Redptr;
         struct Player *YellowPtr;
 
+
+    if(a==2){
         printf("Player 1, Enter your name please: ");
         fgets(Player_1.Name,40,stdin);
 
@@ -490,26 +491,6 @@ void Connect4(int **board, char input[100])
 
 
     else if(a==1){
-        initializeBoard(board);
-
-        int column;
-        int k=0;//for the number of tries.
-
-        //Timer variables
-        clock_t start_t,end_t;
-
-        //Creating the Players.
-
-        struct Player Player_1;
-        Player_1.time_taken=0;
-
-        struct Player Player_2;
-        Player_2.time_taken=0;
-
-        //Creating pointers to the Players.
-        struct Player *Redptr;
-        struct Player *YellowPtr;
-
         printf("Player 1, Enter your name please: ");
         fgets(Player_1.Name,40,stdin);
 
@@ -519,10 +500,6 @@ void Connect4(int **board, char input[100])
 
         printf("\n");
 
-
-        Player_2.Name[0]='B';
-        Player_2.Name[1]='O';
-        Player_2.Name[2]='T';
 
         printf("We will toss a coin to see who's lucky to start!\n");
 
@@ -536,8 +513,7 @@ void Connect4(int **board, char input[100])
         Sleep(1000);//let them wait, just for fun 🙂
 
         if (who_starts==1){         //Actually we are not tossing a coin to see who starts, we actually toss a coin to see who is the red player (Player with insert number 1)
-            Player_1.Color='R';     //and the red player always starts.
-            Player_2.Color='Y';     //Bot is yellow and player is red
+            Player_1.Color='R';     //and the red player always starts. 
             Redptr=&Player_1;
             YellowPtr=&Player_2;
             printf("%s was lucky enough to start!\n",Player_1.Name);
@@ -547,10 +523,8 @@ void Connect4(int **board, char input[100])
             Player_2.Color='R';    //Bot is red and player is yellow
             Player_1.Color='Y';
             Redptr=&Player_2;
-            YellowPtr=&Player_1;
-            printf("%s was lucky enough to start!\n",Player_2.Name);
+            printf("Bot was lucky enough to start!\n");
         }
-
 
 
         if(Player_2.Color=='R'){
@@ -563,13 +537,12 @@ void Connect4(int **board, char input[100])
         }
 
         while (k<42){
-
-            printf("%s , Enter a number between 1 and 7: ",Redptr->Name);
-
+            
             start_t=clock();
 
 
-            if(AIPIECE!=1){
+            if(PlayerPiece==1){
+                printf("%s , Enter a number between 1 and 7: ",Redptr->Name);
                 fgets(input,100,stdin);
                 while (valid_And_Legal(input,board)==0){
 
@@ -578,21 +551,25 @@ void Connect4(int **board, char input[100])
                 }
                 column=input[0]-'0'; //"input" is a char array, so we convert to int.
                 updateBoard(column,board,1);
+                end_t=clock();
+                Player_1.time_taken += ((double)(end_t - start_t))/CLOCKS_PER_SEC;//This increments Red's timer.
             }
+
 
             else
             {
-                int *new_score=minimax(board,15,-9999999,9999999,1,-1);
+                 start_t=clock();
+                int *new_score=minimax(board,5,-9999999,9999999,1,-1);
                 printf("\n Runnnn isss  %lld\n",runn);
                 runn=0;
                 column=*(new_score)+1;
                 updateBoard(column,board,1);
                 free(new_score);
+                end_t=clock();
+                Player_2.time_taken+=((double)(end_t - start_t))/CLOCKS_PER_SEC;
             }
 
-            end_t=clock();
-            Redptr->time_taken += ((double)(end_t - start_t))/CLOCKS_PER_SEC;//This increments Red's timer.
-            // updateBoard(column,board,1);
+
             printBoard(board);
 
             //Check if the game is over here.
@@ -600,7 +577,7 @@ void Connect4(int **board, char input[100])
             if(k>5){
                 int Who_won=isOver(board,column-1);
                 if((Who_won == 1 && AIPIECE==1) || (Who_won == -1 && AIPIECE == 2) == 1){
-                    printf(" CONGRATULATIONS Bot, you won!!!\n");
+                    printf("You Lost to Minimax loooooooooooooooooool\n");
                     break;
                 }
                 else if((Who_won == 1 && AIPIECE==2) || (Who_won == -1 && AIPIECE == 1) == 1)
@@ -612,12 +589,11 @@ void Connect4(int **board, char input[100])
 
             k++;
 
-            printf("%s , Enter a number between 1 and 7: ",YellowPtr->Name);
-
-            start_t=clock();
 
 
-            if(AIPIECE!=2){
+            if(PlayerPiece==2){
+                printf("%s , Enter a number between 1 and 7: ",Player_1.Name);
+                start_t=clock();
                 fgets(input,100,stdin);
                 while (valid_And_Legal(input,board)==0){
 
@@ -626,25 +602,26 @@ void Connect4(int **board, char input[100])
                 }
 
                 column=input[0]-'0'; //"input" is a char array, so we convert to int.
-
                 updateBoard(column,board,2);
+                end_t=clock();
+                Player_1.time_taken = YellowPtr->time_taken + ((double)(end_t - start_t))/CLOCKS_PER_SEC;//This increments Yellow's timer.
             }
 
 
             else {
-                int *new_score=minimax(board,15,-9999999,9999999,1,-1);
+                start_t=clock();
+                int *new_score=minimax(board,5,-9999999,9999999,1,-1);
 
                 printf("\n Runnnn isss  %lld\n",runn);
                 runn=0;
                 column=*(new_score)+1;
                 updateBoard(column,board,2);
                 free(new_score);
+                end_t=clock();
+                Player_2.time_taken = YellowPtr->time_taken + ((double)(end_t - start_t))/CLOCKS_PER_SEC;//This increments Yellow's timer.
             }
 
 
-
-            end_t=clock();
-            YellowPtr->time_taken = YellowPtr->time_taken + ((double)(end_t - start_t))/CLOCKS_PER_SEC;//This increments Yellow's timer.
             //updateBoard(column,board,2);
             printBoard(board);
 
@@ -652,7 +629,7 @@ void Connect4(int **board, char input[100])
             if(k>5){
                 int Who_won=isOver(board,column-1);
                 if((Who_won == 1 && AIPIECE==1) || (Who_won == -1 && AIPIECE == 2) == 1){
-                    printf(" CONGRATULATIONS BOT, you won!!!\n");
+                    printf("You Lost to Minimax looooooooool\n");
                     break;
                 }
                 else if((Who_won == 1 && AIPIECE==2) || (Who_won == -1 && AIPIECE == 1) == 1)
@@ -689,7 +666,6 @@ int Who_Started(int **board){
     int Num_entries=0;
     for(i=0;i<6;i++){
         for(j=0;j<7 ;j++){
-
             if (board[i][j]!=0)
                 Num_entries++;
         }
