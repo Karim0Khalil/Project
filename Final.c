@@ -71,7 +71,6 @@ In this case the player who spent less time during his turns wins the game.
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
 #include <stdbool.h>
 #include <string.h>
 #include <time.h>
@@ -79,7 +78,9 @@ In this case the player who spent less time during his turns wins the game.
 #include "CheckWin.c"
 
 long long int runn = 0;
-int k = 0; // for the number of tries.
+int AIPIECE_KCGH_CODES;
+int PlayerPiece_KCGH_CODES;
+
 
 struct Player
 {
@@ -91,7 +92,7 @@ struct Player
 /*Requires: A declared 6x7 integer 2D array.
 Effects: initializes the entries to "0".
 */
-void initializeBoard(int **board)
+void initializeBoard_KCGH_CODES(int **board)
 {
     int i;
     int j;
@@ -109,7 +110,7 @@ board so far, and the player(Red or Yellow).
 Effects: updates the game board with the value "1" if Red
 plays, and "2" if Yellow plays.
 */
-void updateBoard(int column, int **board, int player)
+void updateBoard_KCGH_CODES(int column, int **board, int player)
 {
     int i;
     for (i = 5; i >= 0; i--)
@@ -131,7 +132,7 @@ void updateBoard(int column, int **board, int player)
 Effects: returns true if the input is valid (an integer between 1 and 7)
 and the column is not full, else it returns false.
 */
-bool valid_And_Legal(char input[100], int **board)
+bool valid_And_Legal_KCGH_CODES(char input[100], int **board)
 {
     // Because this is a char array, we need to convert from ascii to int.
     int column = *input - '0';
@@ -155,7 +156,7 @@ bool valid_And_Legal(char input[100], int **board)
 Requires: The game board(a 6x7 integer 2D array)
 Effects: prints the entries of the board.
 */
-void printBoard(int **board)
+void printBoard_KCGH_CODES(int **board)
 {
     int i;
 
@@ -185,34 +186,16 @@ void printBoard(int **board)
 Effects: A vlaue 1 or 2 indicating which of the two players is going to start.
 Adapted from: https://stackoverflow.com/questions/822323/how-to-generate-a-random-int-in-c
 */
-int CoinToss()
+int CoinToss_KCGH_CODES()
 {
     srand(time(NULL));
     int r = 1 + (rand() % 3);
     return r;
 }
 
-int Random_Valid_Location(int *ValidLocations)
+int isTerminal_KCGH_CODES(int **board, int column)
 {
-    int i;
-    int valid_indeces[7];
-    int j = 0;
-    for (i = 0; i < 7; i++)
-    {
-        if (ValidLocations[i] != -1)
-        {
-            valid_indeces[j] = i;
-            j++;
-        }
-    }
-    int randomindex = (rand() % ((7 - j + 1))) + j;
-    int random_valid_loc = valid_indeces[randomindex];
-    return random_valid_loc;
-}
-
-int isTerminal(int **board, int column)
-{
-    int is_over = isOver(board, column);
+    int is_over = isOver_KCGH_CODES(board, column);
     if (is_over == 1)
         return 1;
     else if (is_over == -1)
@@ -226,58 +209,48 @@ int isTerminal(int **board, int column)
     return 0;
 }
 
-int AIPIECE;
-int PlayerPiece;
-// int play[2];
-int *minimax(int **board, int depth, int alpha, int beta, int Player, int columnPlayed)
+int *Minimax_KCGH_CODES(int **board, int depth, int alpha, int beta, int Player, int columnPlayed)
 {
-    // int a=play[0];
-    // int b=play[1];
-    runn++;
     int *validLocations = GetValidLocations(board);
     int *play = (int *)malloc(2 * sizeof(int));
     if (columnPlayed != -1)
     {
-        if ((depth == 0 || isTerminal(board, columnPlayed) != 0) == 1)
+        if ((depth == 0 || isTerminal_KCGH_CODES(board, columnPlayed) != 0) == 1)
         {
-            if (isTerminal(board, columnPlayed) != 0)
+            if (isTerminal_KCGH_CODES(board, columnPlayed) != 0)
             {
-                int Who_won = isOver(board, columnPlayed);
-                if ((Who_won == 1 && AIPIECE == 1) || (Who_won == -1 && AIPIECE == 2) == 1)
+                int Who_won = isOver_KCGH_CODES(board, columnPlayed);
+                if ((Who_won == 1 && AIPIECE_KCGH_CODES == 1) || (Who_won == -1 && AIPIECE_KCGH_CODES == 2) == 1)
                 {
                     *play = columnPlayed;
                     *(play + 1) = 10000;
-                    // free(board);
                     return play;
                 }
-                else if ((Who_won == 1 && AIPIECE == 2) || (Who_won == -1 && AIPIECE == 1) == 1)
+                else if ((Who_won == 1 && AIPIECE_KCGH_CODES == 2) || (Who_won == -1 && AIPIECE_KCGH_CODES == 1) == 1)
                 {
                     *(play) = columnPlayed;
                     *(play + 1) = -10000;
-                    // free(board);
                     return play;
                 }
                 else if (NumberOfValidPositions(validLocations) == 0)
                 {
                     *play = columnPlayed;
                     *(play + 1) = 0;
-                    // free(board);
                     return play;
                 }
             }
             else
             {
                 *play = columnPlayed;
-                *(play + 1) = scoreposition(board, AIPIECE);
+                *(play + 1) = scoreposition(board, AIPIECE_KCGH_CODES);
                 return play;
-                // free(board);
             }
         }
     }
     if (Player == 1)
     {
         int value = -9999999;
-        int column = Random_Valid_Location(validLocations);
+        int column;
         int SAVE_COL;
         for (int col = 0; col < 7; col++)
         {
@@ -289,16 +262,15 @@ int *minimax(int **board, int depth, int alpha, int beta, int Player, int column
 
             SAVE_COL = *(validLocations + col);
 
-            updateBoard(SAVE_COL + 1, copy_b, AIPIECE);
+            updateBoard_KCGH_CODES(SAVE_COL + 1, copy_b, AIPIECE_KCGH_CODES);
 
             if (depth - 1 < 0)
             {
                 free(copy_b);
                 break;
             }
-            int *new_score = minimax(copy_b, depth - 1, alpha, beta, 0, SAVE_COL);
+            int *new_score = Minimax_KCGH_CODES(copy_b, depth - 1, alpha, beta, 0, SAVE_COL);
             free(copy_b);
-            // copy_b=NULL;
             if (*(new_score + 1) > value)
             {
                 value = new_score[1];
@@ -318,7 +290,7 @@ int *minimax(int **board, int depth, int alpha, int beta, int Player, int column
     else
     {
         int value = 9999999;
-        int column = Random_Valid_Location(validLocations);
+        int column;
         int SAVE_COL;
         for (int col = 0; col < 7; col++)
         {
@@ -326,18 +298,17 @@ int *minimax(int **board, int depth, int alpha, int beta, int Player, int column
             {
                 continue;
             }
-            // int row = nextopenRow(board, validLocations[col]);
             int **copy_b = copyFunction(board);
 
             SAVE_COL = *(validLocations + col);
 
-            updateBoard(SAVE_COL + 1, copy_b, PlayerPiece);
+            updateBoard_KCGH_CODES(SAVE_COL + 1, copy_b, PlayerPiece_KCGH_CODES);
             if (depth - 1 < 0)
             {
                 free(copy_b);
                 break;
             }
-            int *new_score = minimax(copy_b, depth - 1, alpha, beta, 1, SAVE_COL);
+            int *new_score = Minimax_KCGH_CODES(copy_b, depth - 1, alpha, beta, 1, SAVE_COL);
             free(copy_b);
             // copy_b=NULL;
             if (*(new_score + 1) < value)
@@ -357,21 +328,127 @@ int *minimax(int **board, int depth, int alpha, int beta, int Player, int column
         return play;
     }
 }
+/*Requires: a double integer pointer
+ * Effects: returns an array containing the entry corresponding to our turn (1 or 2) along with the number of entries.
+ * Testing Strategy: calling it on an empty array returns nothing.
+ * produces the correct output when calling it on odd and even cases.
+ */
+int *Who_Started_KCGH_CODES(int **board)
+{
+    int *starter = (int *)malloc(2 * sizeof(int));
+    int i;
+    int j;
+    int Num_entries = 0;
+    for (i = 0; i < 6; i++)
+    {
+        for (j = 0; j < 7; j++)
+        {
+            if (board[i][j] != 0)
+                Num_entries++;
+        }
+    }
+
+    if (Num_entries % 2 == 0)
+    {
+        *starter = 1;
+        *(starter + 1) = Num_entries;
+        return starter;
+    }
+    *starter = 2;
+    *(starter + 1) = Num_entries;
+    return starter;
+}
+/*
+ * Requires: The game board
+ * Effects: returns the optimal column.
+ * Testing strategy: sending an empty board: gives us the correct output
+ * sending a board containing an even number of entries as well as odd also gives us the correct output.
+ */
+
+int make_move_KCGH_CODES(int **board)
+{
+    int *turn = Who_Started_KCGH_CODES(board);
+    int entries = *(turn+1);
+    AIPIECE_KCGH_CODES = *turn;
+    int column;
+    int depth=8;
+    if (AIPIECE_KCGH_CODES == 1)
+    {
+        PlayerPiece_KCGH_CODES = 2;
+    }
+    else
+    {
+        PlayerPiece_KCGH_CODES = 1;
+    }
+
+    if (entries == 0)
+    {
+        column = 3;
+    }
+    else if (entries == 2 && board[4][3] == PlayerPiece_KCGH_CODES)
+    {
+        column = 3;
+    }
+    else if (entries == 1 && board[5][3] == 0)
+    {
+        column = 3;
+    }
+    else if (entries == 1 && board[5][3] == PlayerPiece_KCGH_CODES)
+    {
+        column = 3;
+    }
+    else if (entries == 3 && board[3][3] == PlayerPiece_KCGH_CODES)
+    {
+        column = 2;
+    }
+    else if (entries == 4 && board[2][3] == PlayerPiece_KCGH_CODES)
+    {
+        column = 2;
+    }
+    else{
+        if(entries>=16 && entries<21){
+            int *BOT = Minimax_KCGH_CODES(board, depth+1, -9999999, 9999999, 1, -1);
+            column = *BOT;
+        }
+        else if(entries>=21 && entries<28){
+            int *BOT = Minimax_KCGH_CODES(board, depth+2, -9999999, 9999999, 1, -1);
+            column = *BOT;
+        }
+        else if(entries>=28 && entries<35){
+            int *BOT = Minimax_KCGH_CODES(board, depth+3, -9999999, 9999999, 1, -1);
+            column = *BOT;
+        }
+        else if(entries>=35 && entries<38){
+            int *BOT = Minimax_KCGH_CODES(board, depth+4, -9999999, 9999999, 1, -1);
+            column = *BOT;
+        }
+        else if(entries>=38){
+            int *BOT = Minimax_KCGH_CODES(board, depth+5, -9999999, 9999999, 1, -1);
+            column = *BOT;
+        }
+        else {
+            int *BOT = Minimax_KCGH_CODES(board, depth, -9999999, 9999999, 1, -1);
+            column = *BOT;
+        }
+
+    }
+    return column;
+}
 
 /*
 Requires: The game board along with an input array.
 Effects: combines the functionalities made to run the game.
 */
-void Connect4(int **board, char input[100])
+void Connect4_KCGH_CODES(int **board, char input[100])
 {
-
+    int k=0;
     int a;
     printf("Enter 1 for Single Player, 2 for Two Players: ");
 
     scanf("%d", &a);
     fflush(stdin);
 
-    initializeBoard(board);
+    initializeBoard_KCGH_CODES(board);
 
     int column;
 
@@ -408,7 +485,7 @@ void Connect4(int **board, char input[100])
 
         Sleep(1000); // let them wait, just for fun 🙂
 
-        int who_starts = CoinToss();
+        int who_starts = CoinToss_KCGH_CODES();
 
         if (who_starts == 1)
         {                         // Actually we are not tossing a coin to see who starts, we actually toss a coin to see who is the red player (Player with insert number 1)
@@ -434,7 +511,7 @@ void Connect4(int **board, char input[100])
 
             start_t = clock();
             fgets(input, 100, stdin);
-            while (valid_And_Legal(input, board) == 0)
+            while (valid_And_Legal_KCGH_CODES(input, board) == 0)
             {
 
                 fgets(input, 100, stdin);
@@ -442,14 +519,14 @@ void Connect4(int **board, char input[100])
             column = input[0] - '0'; //"input" is a char array, so we convert to int.
             end_t = clock();
             Redptr->time_taken += ((double)(end_t - start_t)) / CLOCKS_PER_SEC; // This increments Red's timer.
-            updateBoard(column, board, 1);
-            printBoard(board);
+            updateBoard_KCGH_CODES(column, board, 1);
+            printBoard_KCGH_CODES(board);
 
             // Check if the game is over here.
             // k>5 because no one would have won before 7 tries (before incrementation).
             if (k > 5)
             {
-                if (isOver(board, column - 1) > 0)
+                if (isOver_KCGH_CODES(board, column - 1) > 0)
                 {
                     printf(" CONGRATULATIONS %s, you won!!!\n", Redptr->Name);
                     break;
@@ -462,7 +539,7 @@ void Connect4(int **board, char input[100])
 
             start_t = clock();
             fgets(input, 100, stdin);
-            while (valid_And_Legal(input, board) == 0)
+            while (valid_And_Legal_KCGH_CODES(input, board) == 0)
             {
 
                 fgets(input, 100, stdin);
@@ -471,13 +548,13 @@ void Connect4(int **board, char input[100])
             column = input[0] - '0'; //"input" is a char array, so we convert to int.
             end_t = clock();
             YellowPtr->time_taken = YellowPtr->time_taken + ((double)(end_t - start_t)) / CLOCKS_PER_SEC; // This increments Yellow's timer.
-            updateBoard(column, board, 2);
-            printBoard(board);
+            updateBoard_KCGH_CODES(column, board, 2);
+            printBoard_KCGH_CODES(board);
 
             // Check if the game is Over here.
             if (k > 5)
             {
-                if (isOver(board, column - 1) < 0)
+                if (isOver_KCGH_CODES(board, column - 1) < 0)
                 {
                     printf(" CONGRATULATIONS %s, you won!!!\n", YellowPtr->Name);
                     break;
@@ -517,11 +594,9 @@ void Connect4(int **board, char input[100])
 
         printf("We will toss a coin to see who's lucky to start!\n");
 
-        Sleep(1000); // let them wait, just for fun 🙂
+        int who_starts = CoinToss_KCGH_CODES();
 
-        int who_starts = CoinToss();
-
-        Sleep(1000); // let them wait, just for fun 🙂
+        Sleep(1500); // let them wait, just for fun 🙂
 
         if (who_starts == 1)
         {                         // Actually we are not tossing a coin to see who starts, we actually toss a coin to see who is the red player (Player with insert number 1)
@@ -540,13 +615,13 @@ void Connect4(int **board, char input[100])
 
         if (Player_2.Color == 'R')
         {
-            AIPIECE = 1;
-            PlayerPiece = 2;
+            AIPIECE_KCGH_CODES = 1;
+            PlayerPiece_KCGH_CODES = 2;
         }
         else
         {
-            AIPIECE = 2;
-            PlayerPiece = 1;
+            AIPIECE_KCGH_CODES = 2;
+            PlayerPiece_KCGH_CODES = 1;
         }
 
         while (k < 42)
@@ -554,75 +629,43 @@ void Connect4(int **board, char input[100])
 
             start_t = clock();
 
-            if (PlayerPiece == 1)
+            if (PlayerPiece_KCGH_CODES == 1)
             {
                 printf("%s , Enter a number between 1 and 7: ", Redptr->Name);
                 fgets(input, 100, stdin);
-                while (valid_And_Legal(input, board) == 0)
+                while (valid_And_Legal_KCGH_CODES(input, board) == 0)
                 {
 
                     fgets(input, 100, stdin);
                 }
                 column = input[0] - '0'; //"input" is a char array, so we convert to int.
-                updateBoard(column, board, 1);
+                updateBoard_KCGH_CODES(column, board, 1);
                 end_t = clock();
                 Player_1.time_taken += ((double)(end_t - start_t)) / CLOCKS_PER_SEC; // This increments Red's timer.
             }
 
             else
             {
-                if (k == 0)
-                {
-                    board[5][3] = AIPIECE;
-                }
-                else if (k == 2 && board[4][3] == PlayerPiece)
-                {
-                    board[3][3] = AIPIECE;
-                }
-                else if (k == 1 && board[5][3] == 0)
-                {
-                    board[5][3] = AIPIECE;
-                }
-                else if (k == 1 && board[5][3] == PlayerPiece)
-                {
-                    board[4][3] = AIPIECE;
-                }
-                else if (k == 3 && board[3][3] == PlayerPiece)
-                {
-                    board[5][2] = AIPIECE;
-                }
-                else if (k == 4 && board[2][3] == PlayerPiece)
-                {
-                    board[5][2] = AIPIECE;
-                }
 
-                else
-                {
-                    start_t = clock();
-                    int *new_score = minimax(board, 7, -9999999, 9999999, 1, -1);
-                    printf("\n Runnnn isss  %lld\n", runn);
-                    runn = 0;
-                    column = *(new_score) + 1;
-                    updateBoard(column, board, 1);
-                    free(new_score);
+                    column = make_move_KCGH_CODES(board) + 1;
+                    updateBoard_KCGH_CODES(column, board, 1);
                     end_t = clock();
                     Player_2.time_taken += ((double)(end_t - start_t)) / CLOCKS_PER_SEC;
-                }
             }
 
-            printBoard(board);
+            printBoard_KCGH_CODES(board);
 
             // Check if the game is over here.
             // k>5 because no one would have won before 7 tries (before incrementation).
             if (k > 5)
             {
-                int Who_won = isOver(board, column - 1);
-                if ((Who_won == 1 && AIPIECE == 1) || (Who_won == -1 && AIPIECE == 2) == 1)
+                int Who_won = isOver_KCGH_CODES(board, column - 1);
+                if ((Who_won == 1 && AIPIECE_KCGH_CODES == 1) || (Who_won == -1 && AIPIECE_KCGH_CODES == 2) == 1)
                 {
                     printf("You Lost to Minimax looooooooooooooooooool\n");
                     break;
                 }
-                else if ((Who_won == 1 && AIPIECE == 2) || (Who_won == -1 && AIPIECE == 1) == 1)
+                else if ((Who_won == 1 && AIPIECE_KCGH_CODES == 2) || (Who_won == -1 && AIPIECE_KCGH_CODES == 1) == 1)
                 {
                     printf(" CONGRATULATIONS %s, you won!!!\n", Player_1.Name);
                     break;
@@ -631,77 +674,43 @@ void Connect4(int **board, char input[100])
 
             k++;
 
-            if (PlayerPiece == 2)
+            if (PlayerPiece_KCGH_CODES == 2)
             {
                 printf("%s , Enter a number between 1 and 7: ", Player_1.Name);
                 start_t = clock();
                 fgets(input, 100, stdin);
-                while (valid_And_Legal(input, board) == 0)
+                while (valid_And_Legal_KCGH_CODES(input, board) == 0)
                 {
 
                     fgets(input, 100, stdin);
                 }
 
                 column = input[0] - '0'; //"input" is a char array, so we convert to int.
-                updateBoard(column, board, 2);
+                updateBoard_KCGH_CODES(column, board, 2);
                 end_t = clock();
                 Player_1.time_taken += ((double)(end_t - start_t)) / CLOCKS_PER_SEC; // This increments Yellow's timer.
             }
 
             else
             {
-                if (k == 0)
-                {
-                    board[5][3] = AIPIECE;
-                }
-                else if (k == 2 && board[4][3] == PlayerPiece)
-                {
-                    board[3][3] = AIPIECE;
-                }
-                else if (k == 1 && board[5][3] == 0)
-                {
-                    board[5][3] = AIPIECE;
-                }
-                else if (k == 1 && board[5][3] == PlayerPiece)
-                {
-                    board[4][3] = AIPIECE;
-                }
-                else if (k == 3 && board[3][3] == PlayerPiece)
-                {
-                    board[5][2] = AIPIECE;
-                }
-                else if (k == 4 && board[2][3] == PlayerPiece)
-                {
-                    board[5][2] = AIPIECE;
-                }
-                else
-                {
-                    start_t = clock();
-                    int *new_score = minimax(board, 7, -9999999, 9999999, 1, -1);
-
-                    printf("\n Runnnn isss  %lld\n", runn);
-                    runn = 0;
-                    column = *(new_score) + 1;
-                    updateBoard(column, board, 2);
-                    free(new_score);
+                    column = make_move_KCGH_CODES(board) + 1;
+                    updateBoard_KCGH_CODES(column, board, 2);
                     end_t = clock();
                     Player_2.time_taken += ((double)(end_t - start_t)) / CLOCKS_PER_SEC; // This increments Yellow's timer.
-                }
             }
-
-            // updateBoard(column,board,2);
-            printBoard(board);
+            
+            printBoard_KCGH_CODES(board);
 
             // Check if the game is Over here.
             if (k > 5)
             {
-                int Who_won = isOver(board, column - 1);
-                if ((Who_won == 1 && AIPIECE == 1) || (Who_won == -1 && AIPIECE == 2) == 1)
+                int Who_won = isOver_KCGH_CODES(board, column - 1);
+                if ((Who_won == 1 && AIPIECE_KCGH_CODES == 1) || (Who_won == -1 && AIPIECE_KCGH_CODES == 2) == 1)
                 {
                     printf("You Lost to Minimax looooooooool\n");
                     break;
                 }
-                else if ((Who_won == 1 && AIPIECE == 2) || (Who_won == -1 && AIPIECE == 1) == 1)
+                else if ((Who_won == 1 && AIPIECE_KCGH_CODES == 2) || (Who_won == -1 && AIPIECE_KCGH_CODES == 1) == 1)
                 {
                     printf(" CONGRATULATIONS %s, you won!!!\n", Player_1.Name);
                     break;
@@ -712,116 +721,20 @@ void Connect4(int **board, char input[100])
 
         if (k == 42)
         {
-            if (Redptr->time_taken < YellowPtr->time_taken)
+            if (Player_1.time_taken < Player_2.time_taken)
             {
-                printf("Time taken by %s:%f\n", YellowPtr->Name, YellowPtr->time_taken);
-                printf("Time taken by %s:%f\n", Redptr->Name, Redptr->time_taken);
-                printf(" CONGRATULATIONS %s, you won!!!", Redptr->Name);
+                printf("Time taken by %s:%.3f\n",Player_1.Name, Player_1.time_taken);
+                printf("Time taken by Bot:%.3f\n", Player_2.time_taken);
+                printf(" CONGRATULATIONS %s, you won!!!", Player_1.Name);
             }
             else
             {
-                printf(" CONGRATULATIONS %s, you won!!!\n", YellowPtr->Name);
-                printf("Time taken by %s:%f\n", YellowPtr->Name, YellowPtr->time_taken);
-                printf("Time taken by %s:%f", Redptr->Name, Redptr->time_taken);
+                printf("Minimax Won!\n");
+                printf("Time taken by Minimax:%.3f\n", Player_2.time_taken);
+                printf("Time taken by %s:%f",Player_1.Name, Player_1.time_taken);
             }
         }
     }
-}
-
-int *Who_Started(int **board)
-{
-    int *starter = (int *)malloc(2 * sizeof(int));
-    int i;
-    int j;
-    int Num_entries = 0;
-    for (i = 0; i < 6; i++)
-    {
-        for (j = 0; j < 7; j++)
-        {
-            if (board[i][j] != 0)
-                Num_entries++;
-        }
-    }
-
-    if (Num_entries % 2 == 0)
-    {
-        *starter = 1;
-        *(starter + 1) = Num_entries;
-        return starter;
-    }
-    *starter = 2;
-    *(starter + 1) = Num_entries;
-    return starter;
-}
-
-int make_move_KCGH_CODES(int **board)
-{
-    int *turn = Who_Started(board);
-    int entries = *(turn+1);
-    AIPIECE = *turn;
-    int column;
-    int depth=8;
-    if (AIPIECE == 1)
-    {
-        PlayerPiece = 2;
-    }
-    else
-    {
-        PlayerPiece = 1;
-    }
-
-    if (entries == 0)
-    {
-        column = 3;
-    }
-    else if (entries == 2 && board[4][3] == PlayerPiece)
-    {
-        column = 3;
-    }
-    else if (entries == 1 && board[5][3] == 0)
-    {
-        column = 3;
-    }
-    else if (entries == 1 && board[5][3] == PlayerPiece)
-    {
-        column = 3;
-    }
-    else if (entries == 3 && board[3][3] == PlayerPiece)
-    {
-        column = 2;
-    }
-    else if (entries == 4 && board[2][3] == PlayerPiece)
-    {
-        column = 2;
-    }
-    else{
-        if(entries>=16 && entries<21){
-            int *BOT = minimax(board, depth+1, -9999999, 9999999, 1, -1);
-            column = *BOT;
-            }
-        else if(entries>=21 && entries<28){
-            int *BOT = minimax(board, depth+2, -9999999, 9999999, 1, -1);
-            column = *BOT;
-        }
-        else if(entries>=28 && entries<35){
-            int *BOT = minimax(board, depth+3, -9999999, 9999999, 1, -1);
-            column = *BOT;
-        }
-        else if(entries>=35 entries<38){
-            int *BOT = minimax(board, depth+4, -9999999, 9999999, 1, -1);
-            column = *BOT;
-        }
-        else if(entries>=38){
-            int *BOT = minimax(board, depth+5, -9999999, 9999999, 1, -1);
-            column = *BOT;
-        }
-        else {
-        int *BOT = minimax(board, depth, -9999999, 9999999, 1, -1);
-        column = *BOT;
-        }
-        
-    }
-    return column;
 }
 
 int main()
@@ -833,11 +746,7 @@ int main()
         board[i] = (int *)malloc(sizeof(int) * 7);
     }
     char arr[100];
-    // play=(int*)malloc(2*sizeof(int));
-    //*play=0;
-    //*(play+1)=0;
-    Connect4(board, arr);
+    Connect4_KCGH_CODES(board, arr);
     free(board);
-    // free(play);
     return 0;
 }
