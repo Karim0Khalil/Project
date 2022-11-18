@@ -597,7 +597,7 @@ void Connect4(int **board, char input[100])
                 else
                 {
                     start_t = clock();
-                    int *new_score = minimax(board, 8, -9999999, 9999999, 1, -1);
+                    int *new_score = minimax(board, 9, -9999999, 9999999, 1, -1);
                     printf("\n Runnnn isss  %lld\n", runn);
                     runn = 0;
                     column = *(new_score) + 1;
@@ -617,7 +617,7 @@ void Connect4(int **board, char input[100])
                 int Who_won = isOver(board, column - 1);
                 if ((Who_won == 1 && AIPIECE == 1) || (Who_won == -1 && AIPIECE == 2) == 1)
                 {
-                    printf("You Lost to Minimax loooooooooooooooooool\n");
+                    printf("You Lost to Minimax looooooooooooooooooool\n");
                     break;
                 }
                 else if ((Who_won == 1 && AIPIECE == 2) || (Who_won == -1 && AIPIECE == 1) == 1)
@@ -673,7 +673,7 @@ void Connect4(int **board, char input[100])
                 else
                 {
                     start_t = clock();
-                    int *new_score = minimax(board, 8, -9999999, 9999999, 1, -1);
+                    int *new_score = minimax(board, 9, -9999999, 9999999, 1, -1);
 
                     printf("\n Runnnn isss  %lld\n", runn);
                     runn = 0;
