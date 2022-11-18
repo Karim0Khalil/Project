@@ -6,19 +6,18 @@
 
 This file contains the following functions:
 
-int isOver(int**, int);
-int findRow(int** , int column);
+int isOver_KCGH_CODES(int**, int);
+int findRow_KCGH_CODES(int** , int column);
 int checkVertically(int [6][7], int row, int column, int size);
 int checkHorizontally(int[6][7], int row, int column, int size);
 int checkDiagonally_1(int[6][7], int row, int column, int size);
 int checkDiagonally_2(int [6][7], int row, int column, int input);
-int isOver(int **array, int column);
-int nextopenRow(int **board, int column);
-int *GetValidLocations(int **board);
-int CountWindow(int window[], int size, int piece);
-int evauluate_window(int window[], int size, int piece);
-int **copyFunction(int **board);
-int scoreposition(int **board, int piece);
+int nextopenRow_KCGH_CODES(int **board, int column);
+int *GetValidLocations_KCGH_CODES(int **board);
+int CountWindow_KCGH_CODES(int window[], int size, int piece);
+int evauluate_window_KCGH_CODES(int window[], int size, int piece);
+int **copyFunction_KCGH_CODES(int **board);
+int scoreposition_KCGH_CODES(int **board, int piece);
 
 */
 
@@ -29,7 +28,7 @@ int scoreposition(int **board, int piece);
     effects: returns the row that was played at
 */
 
-int findRow(int **array, int column)
+int findRow_KCGH_CODES(int **array, int column)
 {
     int i = 0;
     int row = 0;
@@ -205,7 +204,7 @@ int checkDiagonally_2(int array[6][7], int row, int column, int input)
  * It calls 5 functions, such that each function checks vertically or horizontally and two functions to check the 2 diagonals.
  * 
  */
-int isOver(int **board, int column)
+int isOver_KCGH_CODES(int **board, int column)
 {
     int columns = 7;
     int rows = 6;
@@ -264,7 +263,7 @@ example:
 	 };
 	 nextopenRow(board,6) will also output 0.
 */
-int nextopenRow(int **board, int column)
+int nextopenRow_KCGH_CODES(int **board, int column)
 {
 	for (int i = 0; i < 6; i++)
 		if (board[i][column] == 0)
@@ -291,7 +290,7 @@ Output: {1,0,0,0,0,0,0}
 This function will always output the correct result since we are always giving it a fixed sized board with valid arguments
 in our function calls.
 */
-int *GetValidLocations(int **board)
+int *GetValidLocations_KCGH_CODES(int **board)
 {
     int *arr = (int *)malloc(sizeof(int) * 7);
     for (int i = 0; i < 7; ++i)
@@ -306,7 +305,6 @@ int *GetValidLocations(int **board)
     return arr;
 }
 /*
-
 int CountWindow(int window[], int size, int piece)
 
 Requires: A 1D array of size 4, size of the given 1D array(as an integer) which is 4, and an integer named piece which can
@@ -319,7 +317,7 @@ CountWindow(window,4,2) will ouput 2.
 
 The algorithm is clear and is always guranteed to output the correct answer.
 */
-int CountWindow(int window[], int size, int piece)
+int CountWindow_KCGH_CODES(int window[], int size, int piece)
 {
     int count = 0;
     for (int i = 0; i < size; ++i)
@@ -362,7 +360,7 @@ it is used in our evaluating window function.
 These are the 4 cases that can be experimented, otherwise if for example we enter a negative number, the function will eventaully return
 0 score. Enterting wrong arguments is the fault of the client, since we specified in the precondition that the piece entered must be 1 or 2.
 */
-int evauluate_window(int window[], int size, int piece)
+int evauluate_window_KCGH_CODES(int window[], int size, int piece)
 {
     int score = 0;
     int opp_piece = 1;
@@ -406,7 +404,7 @@ Testing: given the board[6][7] by:
 	 int **board = copyFunction(gameboard);
 	 The newly created board will be a 2D array a copy of gameboard(having a different address).
 */
-int **copyFunction(int **board)
+int **copyFunction_KCGH_CODES(int **board)
 {
     int **copy =(int**) malloc(6 * sizeof(int *));
     if (copy == NULL)
@@ -482,7 +480,7 @@ scorepostion(gameboard,1); && scorepostion(gameboard,2);
 	 gave us the correct result here the result for the pieces 1 or 2.
 	 scorepostions for 1 and 2 here gives us the same result , since the board is empty.
 */
-int scoreposition(int **board, int piece)
+int scoreposition_KCGH_CODES(int **board, int piece)
 {
     int score = 0;
     int window[4];
@@ -512,7 +510,7 @@ int scoreposition(int **board, int piece)
             {
                 window[i] = row_array[i + c];
             }
-            score += evauluate_window(window, 4, piece);
+            score += evauluate_window_KCGH_CODES(window, 4, piece);
         }
     }
     // Score vertical
@@ -529,7 +527,7 @@ int scoreposition(int **board, int piece)
             {
                 window[i] = col_array[i + r];
             }
-            score += evauluate_window(window, 4, piece);
+            score += evauluate_window_KCGH_CODES(window, 4, piece);
         }
     }
     // Score diagonal
@@ -541,7 +539,7 @@ int scoreposition(int **board, int piece)
             {
                 window[i] = board[r + i][c + i];
             }
-            score += evauluate_window(window, 4, piece);
+            score += evauluate_window_KCGH_CODES(window, 4, piece);
         }
     }
 
@@ -553,7 +551,7 @@ int scoreposition(int **board, int piece)
             {
                 window[i] = board[r + 3 - i][c + i];
             }
-            score += evauluate_window(window, 4, piece);
+            score += evauluate_window_KCGH_CODES(window, 4, piece);
         }
     }
 
@@ -577,7 +575,7 @@ Valid[i]=-1;
 NumberOfValidPositions(Valid) will output 7.
 All other cases are trivial...
 */
-int NumberOfValidPositions(int *ValidPositions)
+int NumberOfValidPositions_KCGH_CODES(int *ValidPositions)
 {
     int size=0;
     for(int i=0;i<7;i++){
