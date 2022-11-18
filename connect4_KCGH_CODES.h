@@ -558,41 +558,6 @@ int NumberOfValidPositions_KCGH_CODES(const int *ValidPositions)
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // THIS IS WHERE THE GAME RUNS
 /*
        Horizontal Case
@@ -662,7 +627,6 @@ Player 2 wins in rows 3 to 6 and columns 1 to 4
 - - - - - - - - - - - - - - -
 In this case the player who spent less time during his turns wins the game.
 */
-
 
 
 struct Player
@@ -941,7 +905,6 @@ int *Who_Started_KCGH_CODES(int **board)
     *(starter + 1) = Num_entries;
     return starter;
 }
-
 /*
  * Requires: The game board
  * Effects: returns the optimal column.
@@ -1018,7 +981,6 @@ int make_move_KCGH_CODES(int **board)
     }
     return column;
 }
-
 
 /*
 Requires: The game board along with an input array.
