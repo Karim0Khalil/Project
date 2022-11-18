@@ -7,15 +7,16 @@
 This file contains the following functions:
 
 int isOver_KCGH_CODES(int**, int);
-int findRow_KCGH_CODES(int** , int column);
+int findRow(int** , int column);
 int checkVertically(int [6][7], int row, int column, int size);
 int checkHorizontally(int[6][7], int row, int column, int size);
 int checkDiagonally_1(int[6][7], int row, int column, int size);
 int checkDiagonally_2(int [6][7], int row, int column, int input);
-int nextopenRow_KCGH_CODES(int **board, int column);
-int *GetValidLocations_KCGH_CODES(int **board);
-int CountWindow_KCGH_CODES(int window[], int size, int piece);
-int evauluate_window_KCGH_CODES(int window[], int size, int piece);
+int isOver_KCGH_CODES(int **array, int column);
+int nextopenRow(int **board, int column);
+int *GetValidLocations(int **board);
+int CountWindow(int window[], int size, int piece);
+int evauluate_window(int window[], int size, int piece);
 int **copyFunction_KCGH_CODES(int **board);
 int scoreposition_KCGH_CODES(int **board, int piece);
 
@@ -39,8 +40,7 @@ int findRow_KCGH_CODES(int **array, int column)
             row++;
             insertion=array[row][column];
         }
-        else if (insertion != 0)
-            break;
+        else break;
     }
     return row;
 }
@@ -51,31 +51,31 @@ int findRow_KCGH_CODES(int **array, int column)
     requires: the board, column and row that the last turn was played at, and whose turn it was
     effects: return 1 if there is any win at the row the last turn was played at
 */
-int checkVertically(int array[6][7], int row, int column, int input)
+int checkVertically_KCGH_CODES(int array[6][7], int row, int column, int input)
 
 {
-    
+
     int i = 0;
     int j = i;
     int streak = 0;
 
-   	while (5 - i >= 3)   //there are 3 possible wins at each horizontal level
-	{
-		for (j; j < 4+i; j++)
-		{
-			if (array[j][column] == input)  //checks that if there is a win, the win must be from one player only
-				streak++;
-		}
+    while (5 - i >= 3)   //there are 3 possible wins at each horizontal level
+    {
+        for (j; j < 4+i; j++)
+        {
+            if (array[j][column] == input)  //checks that if there is a win, the win must be from one player only
+                streak++;
+        }
 
-		if (streak == 4)
-			return 1;
+        if (streak == 4)
+            return 1;
 
-		i++;
-		j = i;
-		streak = 0;
+        i++;
+        j = i;
+        streak = 0;
 
-	}
-	return 0;
+    }
+    return 0;
 }
 
 /*
@@ -85,7 +85,7 @@ int checkVertically(int array[6][7], int row, int column, int input)
     effects: return 1 if there is any win at the column the last turn was played at
 */
 
-int checkHorizontally(int array[6][7], int row, int column, int input)
+int checkHorizontally_KCGH_CODES(int array[6][7], int row, int column, int input)
 {
 
     int i = 0;
@@ -117,41 +117,41 @@ int checkHorizontally(int array[6][7], int row, int column, int input)
      effects: return 1 if there is any win at the diagonal to the right the last turn was played at
 */
 
-int checkDiagonally_1(int array[6][7], int row, int column, int input)
+int checkDiagonally_1_KCGH_CODES(int array[6][7], int row, int column, int input)
 {
 
-   int diagonal[6] = { -1,-1,-1,-1,-1,-1 };
-   int i = 0;
-	
-	while (row <= 5 && column>0)
-	{
-		row++;
-		column--;
-	}
+    int diagonal[6] = { -1,-1,-1,-1,-1,-1 };
+    int i = 0;
 
-	while (row >= 0 && column <= 6)
-	{
-		diagonal[i] = array[row--][column++];
-		i++;
-	}
+    while (row <= 5 && column>0)
+    {
+        row++;
+        column--;
+    }
 
-	i = 0;
-	int j = 0;
-	int streak = 0;
+    while (row >= 0 && column <= 6)
+    {
+        diagonal[i] = array[row--][column++];
+        i++;
+    }
 
-	for (i; i < 3; i++)
-	{
-		for (j; j < 4; j++)
-		{
-			if (diagonal[j+i] == input) //checks that if there is a win, the win must be from one player only
-				streak++;
-		}
-		if (streak == 4)
-			return 1;
-		j = 0;
-		streak = 0;
-	}
-	return 0;
+    i = 0;
+    int j = 0;
+    int streak = 0;
+
+    for (i; i < 3; i++)
+    {
+        for (j; j < 4; j++)
+        {
+            if (diagonal[j+i] == input) //checks that if there is a win, the win must be from one player only
+                streak++;
+        }
+        if (streak == 4)
+            return 1;
+        j = 0;
+        streak = 0;
+    }
+    return 0;
 }
 
 /*
@@ -160,55 +160,55 @@ int checkDiagonally_1(int array[6][7], int row, int column, int input)
     requires: the board, column and row that the last turn was played at, and whose turn it was
     effects: return 1 if there is any win at the diagonal to the left the last turn was played at
 */
- 
-int checkDiagonally_2(int array[6][7], int row, int column, int input)
+
+int checkDiagonally_2_KCGH_CODES(int array[6][7], int row, int column, int input)
 {
-   
+
     int diagonal[6] = { -1,-1,-1,-1,-1,-1 };
-	int i = 0;
+    int i = 0;
 
-	while (row < 5 && column > 0)
-	{
-		row++;
-		column++;
-	}
-	while (row >= 0 && column <= 6)
-	{
-		diagonal[i] = array[row--][column--];
-		i++;
-	}
-	i = 0;
-	int j = 0;
-	int streak = 0;
+    while (row < 5 && column > 0)
+    {
+        row++;
+        column++;
+    }
+    while (row >= 0 && column <= 6)
+    {
+        diagonal[i] = array[row--][column--];
+        i++;
+    }
+    i = 0;
+    int j = 0;
+    int streak = 0;
 
-	for (i; i < 3; i++)
-	{
-		for (j; j < 4; j++)
-		{
-			if (diagonal[j + i] == input) //checks that if there is a win, the win must be from one player only
-				streak++;
-		}
-		if (streak == 4)
-			return 1;
-		j = 0;
-		streak = 0;
-	}
-	return 0;
+    for (i; i < 3; i++)
+    {
+        for (j; j < 4; j++)
+        {
+            if (diagonal[j + i] == input) //checks that if there is a win, the win must be from one player only
+                streak++;
+        }
+        if (streak == 4)
+            return 1;
+        j = 0;
+        streak = 0;
+    }
+    return 0;
 }
 
 /*
- * int isOver(int array[6][7], int column)
+ * int isOver_KCGH_CODES(int array[6][7], int column)
  *
  * requires: The column in which has last inserted.
  * effects: Returns if the user's last move allows him to win by returning an integer >0; else it returns 0.
  * It calls 5 functions, such that each function checks vertically or horizontally and two functions to check the 2 diagonals.
- * 
+ *
  */
 int isOver_KCGH_CODES(int **board, int column)
 {
     int columns = 7;
     int rows = 6;
-    int row = findRow(board, column);
+    int row = findRow_KCGH_CODES(board, column);
 
     int array[6][7];
 
@@ -222,62 +222,27 @@ int isOver_KCGH_CODES(int **board, int column)
 
     int input = array[row][column];
 
-    int vertical = checkVertically(array, row, column, input);
-    int horizontal = checkHorizontally(array, row, column, input);
-    int diagonal1 = checkDiagonally_1(array, row, column, input);
-    int diagonal2 = checkDiagonally_2(array, row, column, input);
+    int vertical = checkVertically_KCGH_CODES(array, row, column, input);
+    int horizontal = checkHorizontally_KCGH_CODES(array, row, column, input);
+    int diagonal1 = checkDiagonally_1_KCGH_CODES(array, row, column, input);
+    int diagonal2 = checkDiagonally_2_KCGH_CODES(array, row, column, input);
 
     int result = vertical + horizontal + diagonal1 + diagonal2;
     if (result > 0 && input==1)
         return 1;
     else if (result > 0 && input == 2)
         return -1;
-}
-/*
-int nextopenRow(int **board, int column)
-
-Requires: An int** board argument(2D array) , and an integer argument which is a column(values allowed btwn 0-6)
-Effects: Returns the first valid row where the player can place the peice at the given column.
-
-Testing: 2 Sufficeint test cases:
-
-1-Given a board allocated dynamically with malloc, given the column where we need to check at what row position can we place:
-example of board: consider: {
-	 {2,1,1,2,2,1,0}
-	,{2,1,1,2,2,1,2}
-	,{1,2,2,1,1,2,1}
-	,{2,1,2,2,1,1,2}
-	,{1,2,2,1,1,2,1},
-	 {2,1,1,2,2,1,2}
-	 };
-	nextopenRow(board,6) will output 0;
-
-2-Given an empty array we must get row 0, since no player has played yet
-example: 
-	 {0,0,0,0,0,0,0}
-	,{0,0,0,0,0,0,0}
-	,{0,0,0,0,0,0,0}
-	,{0,0,0,0,0,0,0}
-	,{0,0,0,0,0,0,0},
-	 {0,0,0,0,0,0,0}
-	 };
-	 nextopenRow(board,6) will also output 0.
-*/
-int nextopenRow_KCGH_CODES(int **board, int column)
-{
-	for (int i = 0; i < 6; i++)
-		if (board[i][column] == 0)
-			return i;
+    return 0;
 }
 /*
 int *GetValidLocations(int **board)
 
 Requires: The 2D array board with 6 rows and 7 columns
-Effects: Returns a 1D array with the valid locations(meaning the column is valid to make 
-a move in) of the numbered columns in the board, -1 otherwise. 
+Effects: Returns a 1D array with the valid locations(meaning the column is valid to make
+a move in) of the numbered columns in the board, -1 otherwise.
 
 
-Test cases: 
+Test cases:
 1- If given a valid input the functions performs its operations correctly.
 given an 2Darray(gameboard)
 int gameboard[6][7] = {{0,0,0,0,0,0,0},{0,0,0,0,0,0,0},{0,0,0,0,0,0,0},{0,0,0,0,0,0,0},{0,0,0,2,0,0,0},{0,1,1,1,2,2,0}};
@@ -305,6 +270,7 @@ int *GetValidLocations_KCGH_CODES(int **board)
     return arr;
 }
 /*
+
 int CountWindow(int window[], int size, int piece)
 
 Requires: A 1D array of size 4, size of the given 1D array(as an integer) which is 4, and an integer named piece which can
@@ -313,7 +279,7 @@ Effects:Returns the number of times piece is found in the window array
 
 Simple Testing case:
 window = {1,2,1,2};
-CountWindow(window,4,2) will ouput 2. 
+CountWindow(window,4,2) will ouput 2.
 
 The algorithm is clear and is always guranteed to output the correct answer.
 */
@@ -354,13 +320,13 @@ evauluate_window(int window[], 4, 1) will output score -4 which is correct.
 
 If peices 1 and 2 are found in the array, the score won't be updated.
 
-Permutations of the list won't effect the algorithm, since we assume that the CountWindow function is implemented correclty and tested and
+Permutations of the list won't effect the algorithm, since we assume that the CountWindow_KCGH_CODES function is implemented correclty and tested and
 it is used in our evaluating window function.
 
 These are the 4 cases that can be experimented, otherwise if for example we enter a negative number, the function will eventaully return
 0 score. Enterting wrong arguments is the fault of the client, since we specified in the precondition that the piece entered must be 1 or 2.
 */
-int evauluate_window_KCGH_CODES(int window[], int size, int piece)
+int evauluate_window(int window[], int size, int piece)
 {
     int score = 0;
     int opp_piece = 1;
@@ -368,28 +334,28 @@ int evauluate_window_KCGH_CODES(int window[], int size, int piece)
     {
         opp_piece = 2;
     }
-    if (CountWindow(window, 4, piece) == 4)
+    if (CountWindow_KCGH_CODES(window, 4, piece) == 4)
     {
         score += 100;
     }
-    else if (CountWindow(window, 4, piece) == 3 && CountWindow(window, 4, 0) == 1)
+    else if (CountWindow_KCGH_CODES(window, 4, piece) == 3 && CountWindow_KCGH_CODES(window, 4, 0) == 1)
     {
         score += 5;
     }
-    else if (CountWindow(window, 4, piece) == 2 && CountWindow(window, 4, 0) == 2)
+    else if (CountWindow_KCGH_CODES(window, 4, piece) == 2 && CountWindow_KCGH_CODES(window, 4, 0) == 2)
     {
         score += 2;
     }
-    if (CountWindow(window, 4, opp_piece) == 3 && CountWindow(window, 4, 0) == 1)
+    if (CountWindow_KCGH_CODES(window, 4, opp_piece) == 3 && CountWindow_KCGH_CODES(window, 4, 0) == 1)
     {
         score -= 4;
     }
     return score;
 }
 /*
-int **copyFunction(int **board)
+int **copyFunction_KCGH_CODES(int **board)
 
-Requires: A 2D array board of 6 rows and 7 columns. 
+Requires: A 2D array board of 6 rows and 7 columns.
 Effects: Returns a double pointer which refers to the address of a copy of the given board which is a 2D array.
 
 Testing: given the board[6][7] by:
@@ -401,7 +367,7 @@ Testing: given the board[6][7] by:
 	,{1,2,2,1,1,2,1},
 	 {2,1,1,2,2,1,2}
 	 };
-	 int **board = copyFunction(gameboard);
+	 int **board = copyFunction_KCGH_CODES(gameboard);
 	 The newly created board will be a 2D array a copy of gameboard(having a different address).
 */
 int **copyFunction_KCGH_CODES(int **board)
@@ -431,19 +397,19 @@ int **copyFunction_KCGH_CODES(int **board)
     return copy;
 }
 /*
-int scoreposition(int **board, int piece)
+int scoreposition_KCGH_CODES(int **board, int piece)
 
 Requires: A 2D array which is the board of 6 rows and 7 columns and an integer piece argument piece which can have the value of 1 or 2.
 
-Effects: Returns a given score , using the evaluate window functions for rows,columns, left and right diagonals. 
+Effects: Returns a given score , using the evaluate window functions for rows,columns, left and right diagonals.
 
-Testing Cases: The function int scoreposition(int board[6][7], int piece) uses the help of the function evaluate position which we assume
-it is correct. 
+Testing Cases: The function int scoreposition_KCGH_CODES(int board[6][7], int piece) uses the help of the function evaluate position which we assume
+it is correct.
 
 The function will give us the combinations of all the rows and columns, and diagonals in a 1D array.
 Note: we tested each function call seperately and it resulted in outputing correct answers.
 
-1-For even entries: 
+1-For even entries:
 scorepostion(gameboard,1); && scorepostion(gameboard,2);
  int gameboard[6][7] = {
 	 {0,1,1,2,2,1,0}
@@ -510,7 +476,7 @@ int scoreposition_KCGH_CODES(int **board, int piece)
             {
                 window[i] = row_array[i + c];
             }
-            score += evauluate_window_KCGH_CODES(window, 4, piece);
+            score += evauluate_window(window, 4, piece);
         }
     }
     // Score vertical
@@ -527,7 +493,7 @@ int scoreposition_KCGH_CODES(int **board, int piece)
             {
                 window[i] = col_array[i + r];
             }
-            score += evauluate_window_KCGH_CODES(window, 4, piece);
+            score += evauluate_window(window, 4, piece);
         }
     }
     // Score diagonal
@@ -539,7 +505,7 @@ int scoreposition_KCGH_CODES(int **board, int piece)
             {
                 window[i] = board[r + i][c + i];
             }
-            score += evauluate_window_KCGH_CODES(window, 4, piece);
+            score += evauluate_window(window, 4, piece);
         }
     }
 
@@ -551,14 +517,14 @@ int scoreposition_KCGH_CODES(int **board, int piece)
             {
                 window[i] = board[r + 3 - i][c + i];
             }
-            score += evauluate_window_KCGH_CODES(window, 4, piece);
+            score += evauluate_window(window, 4, piece);
         }
     }
 
     return score;
 }/*
 
-int NumberOfValidPositions(int *ValidPositions)
+int NumberOfValidPositions_KCGH_CODES(int *ValidPositions)
 
 Requires: An array pointer.
 
@@ -572,10 +538,10 @@ Manual Example:
 int *Valid = int*(malloc(sizeof(int))7);
 for(int i=0;i<7;++i)
 Valid[i]=-1;
-NumberOfValidPositions(Valid) will output 7.
+NumberOfValidPositions_KCGH_CODES(Valid) will output 7.
 All other cases are trivial...
 */
-int NumberOfValidPositions_KCGH_CODES(int *ValidPositions)
+int NumberOfValidPositions_KCGH_CODES(const int *ValidPositions)
 {
     int size=0;
     for(int i=0;i<7;i++){
@@ -584,7 +550,4 @@ int NumberOfValidPositions_KCGH_CODES(int *ValidPositions)
     }
     return size;
 }
-
-int AI = 1;
-int player = 2;
 

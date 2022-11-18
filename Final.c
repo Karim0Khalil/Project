@@ -200,8 +200,8 @@ int isTerminal_KCGH_CODES(int **board, int column)
         return 1;
     else if (is_over == -1)
         return -1;
-    int *ValidPositions = GetValidLocations(board);
-    if (NumberOfValidPositions(ValidPositions) == 0)
+    int *ValidPositions = GetValidLocations_KCGH_CODES(board);
+    if (NumberOfValidPositions_KCGH_CODES(ValidPositions) == 0)
     {
         free(ValidPositions);
         return -2;
@@ -211,7 +211,7 @@ int isTerminal_KCGH_CODES(int **board, int column)
 
 int *Minimax_KCGH_CODES(int **board, int depth, int alpha, int beta, int Player, int columnPlayed)
 {
-    int *validLocations = GetValidLocations(board);
+    int *validLocations = GetValidLocations_KCGH_CODES(board);
     int *play = (int *)malloc(2 * sizeof(int));
     if (columnPlayed != -1)
     {
@@ -232,7 +232,7 @@ int *Minimax_KCGH_CODES(int **board, int depth, int alpha, int beta, int Player,
                     *(play + 1) = -10000;
                     return play;
                 }
-                else if (NumberOfValidPositions(validLocations) == 0)
+                else if (NumberOfValidPositions_KCGH_CODES(validLocations) == 0)
                 {
                     *play = columnPlayed;
                     *(play + 1) = 0;
@@ -242,7 +242,7 @@ int *Minimax_KCGH_CODES(int **board, int depth, int alpha, int beta, int Player,
             else
             {
                 *play = columnPlayed;
-                *(play + 1) = scoreposition(board, AIPIECE_KCGH_CODES);
+                *(play + 1) = scoreposition_KCGH_CODES(board, AIPIECE_KCGH_CODES);
                 return play;
             }
         }
@@ -258,7 +258,7 @@ int *Minimax_KCGH_CODES(int **board, int depth, int alpha, int beta, int Player,
             {
                 continue;
             }
-            int **copy_b = copyFunction(board);
+            int **copy_b = copyFunction_KCGH_CODES(board);
 
             SAVE_COL = *(validLocations + col);
 
@@ -298,7 +298,7 @@ int *Minimax_KCGH_CODES(int **board, int depth, int alpha, int beta, int Player,
             {
                 continue;
             }
-            int **copy_b = copyFunction(board);
+            int **copy_b = copyFunction_KCGH_CODES(board);
 
             SAVE_COL = *(validLocations + col);
 
@@ -698,7 +698,7 @@ void Connect4_KCGH_CODES(int **board, char input[100])
                     end_t = clock();
                     Player_2.time_taken += ((double)(end_t - start_t)) / CLOCKS_PER_SEC; // This increments Yellow's timer.
             }
-            
+
             printBoard_KCGH_CODES(board);
 
             // Check if the game is Over here.
