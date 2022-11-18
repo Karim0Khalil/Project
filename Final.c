@@ -169,7 +169,7 @@ void printBoard(int **board)
     {
         for (j = 0; j < 7; j++)
         {
-            printf("|__%d__", board[i][j]);
+            printf("| __ %d __ ", board[i][j]);
         }
         printf("|\n");
     }
@@ -228,11 +228,8 @@ int isTerminal(int **board, int column)
 
 int AIPIECE;
 int PlayerPiece;
-// int play[2];
 int *minimax(int **board, int depth, int alpha, int beta, int Player, int columnPlayed)
 {
-    // int a=play[0];
-    // int b=play[1];
     runn++;
     int *validLocations = GetValidLocations(board);
     int *play = (int *)malloc(2 * sizeof(int));
@@ -573,31 +570,12 @@ void Connect4(int **board, char input[100])
             {
                 if (k == 0)
                 {
-                    board[5][3] = AIPIECE;
+                    *(*(board + 5) + 3) = AIPIECE;
                 }
-                else if (k == 2 && board[4][3] == PlayerPiece)
-                {
-                    board[3][3] = AIPIECE;
-                }
-                else if (k == 1 && board[5][3] == 0)
-                    {
-                    board[5][3] = AIPIECE;
-                }
-                else if(k == 1 && board[5][3] == PlayerPiece){
-                    board[4][3]=AIPIECE;
-                }
-                else if (k == 3 && board[3][3] == PlayerPiece)
-                {
-                    board[5][2] = AIPIECE;
-                }
-                else if(k==4 && board[2][3] == PlayerPiece){
-                    board[5][2] = AIPIECE;
-                }
-
                 else
                 {
                     start_t = clock();
-                    int *new_score = minimax(board, 8, -9999999, 9999999, 1, -1);
+                    int *new_score = minimax(board, 6, -9999999, 9999999, 1, -1);
                     printf("\n Runnnn isss  %lld\n", runn);
                     runn = 0;
                     column = *(new_score) + 1;
@@ -647,33 +625,17 @@ void Connect4(int **board, char input[100])
             }
 
             else
-            {   
+            {
                 if (k == 0)
                 {
-                    board[5][3] = AIPIECE;
+                    *(*(board + 5) + 3) = AIPIECE;
                 }
-                else if (k == 2 && board[4][3] == PlayerPiece)
-                {
-                    board[3][3] = AIPIECE;
-                }
-                else if (k == 1 && board[5][3] == 0)
-                    {
-                    board[5][3] = AIPIECE;
-                }
-                else if(k == 1 && board[5][3] == PlayerPiece){
-                    board[4][3]=AIPIECE;
-                }
-                else if (k == 3 && board[3][3] == PlayerPiece)
-                {
-                    board[5][2] = AIPIECE;
-                }
-                else if(k==4 && board[2][3] == PlayerPiece){
-                    board[5][2] = AIPIECE;
-                }
+                if(k==1 && *(*(board + 5) + 3)==0)
+                    *(*(board + 5) + 3) = AIPIECE;
                 else
                 {
                     start_t = clock();
-                    int *new_score = minimax(board, 8, -9999999, 9999999, 1, -1);
+                    int *new_score = minimax(board, 6, -9999999, 9999999, 1, -1);
 
                     printf("\n Runnnn isss  %lld\n", runn);
                     runn = 0;
@@ -708,17 +670,17 @@ void Connect4(int **board, char input[100])
 
         if (k == 42)
         {
-            if (Redptr->time_taken < YellowPtr->time_taken)
+            if (Player_1.time_taken < Player_2.time_taken)
             {
-                printf("Time taken by %s:%f\n", YellowPtr->Name, YellowPtr->time_taken);
-                printf("Time taken by %s:%f\n", Redptr->Name, Redptr->time_taken);
-                printf(" CONGRATULATIONS %s, you won!!!", Redptr->Name);
+                printf("Time taken by %s:%.3f\n", Player_1.Name, Player_1.time_taken);
+                printf("Time taken by Bot: %.3f\n", Player_2.time_taken);
+                printf(" CONGRATULATIONS %s, you won!!!", Player_1.Name);
             }
             else
             {
-                printf(" CONGRATULATIONS %s, you won!!!\n", YellowPtr->Name);
-                printf("Time taken by %s:%f\n", YellowPtr->Name, YellowPtr->time_taken);
-                printf("Time taken by %s:%f", Redptr->Name, Redptr->time_taken);
+                printf("Minimax Won", YellowPtr->Name);
+                printf("Time taken by %s:%.3f\n", Player_1.Name, Player_1.time_taken);
+                printf("Time taken by Bot: %.3f\n", Player_2.time_taken);
             }
         }
     }
@@ -748,7 +710,7 @@ int make_move_KCGH_CODES(int **board)
 {
 
     AIPIECE = Who_Started(board);
-
+    
     if (AIPIECE == 1)
     {
         PlayerPiece = 2;
@@ -757,7 +719,7 @@ int make_move_KCGH_CODES(int **board)
     {
         PlayerPiece = 1;
     }
-    int *column = minimax(board, 6, -9999999, 9999999, 1, -1);
+    int *column = minimax(board,6 , -9999999, 9999999, 1, -1);
     return *column;
 }
 
@@ -770,11 +732,7 @@ int main()
         board[i] = (int *)malloc(sizeof(int) * 7);
     }
     char arr[100];
-    // play=(int*)malloc(2*sizeof(int));
-    //*play=0;
-    //*(play+1)=0;
     Connect4(board, arr);
     free(board);
-    // free(play);
     return 0;
 }
