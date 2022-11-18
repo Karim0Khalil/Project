@@ -79,6 +79,7 @@ In this case the player who spent less time during his turns wins the game.
 #include "CheckWin.c"
 
 long long int runn = 0;
+int k = 0; // for the number of tries.
 
 struct Player
 {
@@ -159,16 +160,16 @@ void printBoard(int **board)
     int i;
 
     int j;
-    for (i = 0; i < 15; i++)
+    for (i = 0; i < 11; i++)
     {
-        printf("- ");
+        printf(" __ ");
     }
     printf("\n");
     for (i = 0; i < 6; i++)
     {
         for (j = 0; j < 7; j++)
         {
-            printf("| %d ", board[i][j]);
+            printf("|__%d__", board[i][j]);
         }
         printf("|\n");
     }
@@ -373,7 +374,6 @@ void Connect4(int **board, char input[100])
     initializeBoard(board);
 
     int column;
-    int k = 0; // for the number of tries.
 
     // Timer variables
     clock_t start_t, end_t;
@@ -571,15 +571,22 @@ void Connect4(int **board, char input[100])
 
             else
             {
-                start_t = clock();
-                int *new_score = minimax(board, 6, -9999999, 9999999, 1, -1);
-                printf("\n Runnnn isss  %lld\n", runn);
-                runn = 0;
-                column = *(new_score) + 1;
-                updateBoard(column, board, 1);
-                free(new_score);
-                end_t = clock();
-                Player_2.time_taken += ((double)(end_t - start_t)) / CLOCKS_PER_SEC;
+                if (k == 0)
+                {
+                    *(*(board + 5) + 3) = AIPIECE;
+                }
+                else
+                {
+                    start_t = clock();
+                    int *new_score = minimax(board, 8, -9999999, 9999999, 1, -1);
+                    printf("\n Runnnn isss  %lld\n", runn);
+                    runn = 0;
+                    column = *(new_score) + 1;
+                    updateBoard(column, board, 1);
+                    free(new_score);
+                    end_t = clock();
+                    Player_2.time_taken += ((double)(end_t - start_t)) / CLOCKS_PER_SEC;
+                }
             }
 
             printBoard(board);
@@ -622,16 +629,25 @@ void Connect4(int **board, char input[100])
 
             else
             {
-                start_t = clock();
-                int *new_score = minimax(board, 6, -9999999, 9999999, 1, -1);
+                if (k == 0)
+                {
+                    *(*(board + 5) + 3) = AIPIECE;
+                }
+                if(k==1 && *(*(board + 5) + 3)==0)
+                    *(*(board + 5) + 3) = AIPIECE;
+                else
+                {
+                    start_t = clock();
+                    int *new_score = minimax(board, 8, -9999999, 9999999, 1, -1);
 
-                printf("\n Runnnn isss  %lld\n", runn);
-                runn = 0;
-                column = *(new_score) + 1;
-                updateBoard(column, board, 2);
-                free(new_score);
-                end_t = clock();
-                Player_2.time_taken += ((double)(end_t - start_t)) / CLOCKS_PER_SEC; // This increments Yellow's timer.
+                    printf("\n Runnnn isss  %lld\n", runn);
+                    runn = 0;
+                    column = *(new_score) + 1;
+                    updateBoard(column, board, 2);
+                    free(new_score);
+                    end_t = clock();
+                    Player_2.time_taken += ((double)(end_t - start_t)) / CLOCKS_PER_SEC; // This increments Yellow's timer.
+                }
             }
 
             // updateBoard(column,board,2);
@@ -697,6 +713,7 @@ int make_move_KCGH_CODES(int **board)
 {
 
     AIPIECE = Who_Started(board);
+    
     if (AIPIECE == 1)
     {
         PlayerPiece = 2;
