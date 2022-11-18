@@ -573,8 +573,27 @@ void Connect4(int **board, char input[100])
             {
                 if (k == 0)
                 {
-                    *(*(board + 5) + 3) = AIPIECE;
+                    board[5][3] = AIPIECE;
                 }
+                else if (k == 2 && board[4][3] == PlayerPiece)
+                {
+                    board[3][3] = AIPIECE;
+                }
+                else if (k == 1 && board[5][3] == 0)
+                    {
+                    board[5][3] = AIPIECE;
+                }
+                else if(k == 1 && board[5][3] == PlayerPiece){
+                    board[4][3]=AIPIECE;
+                }
+                else if (k == 3 && board[3][3] == PlayerPiece)
+                {
+                    board[5][2] = AIPIECE;
+                }
+                else if(k==4 && board[2][3] == PlayerPiece){
+                    board[5][2] = AIPIECE;
+                }
+
                 else
                 {
                     start_t = clock();
@@ -628,13 +647,29 @@ void Connect4(int **board, char input[100])
             }
 
             else
-            {
+            {   
                 if (k == 0)
                 {
-                    *(*(board + 5) + 3) = AIPIECE;
+                    board[5][3] = AIPIECE;
                 }
-                if(k==1 && *(*(board + 5) + 3)==0)
-                    *(*(board + 5) + 3) = AIPIECE;
+                else if (k == 2 && board[4][3] == PlayerPiece)
+                {
+                    board[3][3] = AIPIECE;
+                }
+                else if (k == 1 && board[5][3] == 0)
+                    {
+                    board[5][3] = AIPIECE;
+                }
+                else if(k == 1 && board[5][3] == PlayerPiece){
+                    board[4][3]=AIPIECE;
+                }
+                else if (k == 3 && board[3][3] == PlayerPiece)
+                {
+                    board[5][2] = AIPIECE;
+                }
+                else if(k==4 && board[2][3] == PlayerPiece){
+                    board[5][2] = AIPIECE;
+                }
                 else
                 {
                     start_t = clock();
@@ -713,7 +748,7 @@ int make_move_KCGH_CODES(int **board)
 {
 
     AIPIECE = Who_Started(board);
-    
+
     if (AIPIECE == 1)
     {
         PlayerPiece = 2;
