@@ -580,24 +580,26 @@ void Connect4(int **board, char input[100])
                     board[3][3] = AIPIECE;
                 }
                 else if (k == 1 && board[5][3] == 0)
-                    {
+                {
                     board[5][3] = AIPIECE;
                 }
-                else if(k == 1 && board[5][3] == PlayerPiece){
-                    board[4][3]=AIPIECE;
+                else if (k == 1 && board[5][3] == PlayerPiece)
+                {
+                    board[4][3] = AIPIECE;
                 }
                 else if (k == 3 && board[3][3] == PlayerPiece)
                 {
                     board[5][2] = AIPIECE;
                 }
-                else if(k==4 && board[2][3] == PlayerPiece){
+                else if (k == 4 && board[2][3] == PlayerPiece)
+                {
                     board[5][2] = AIPIECE;
                 }
 
                 else
                 {
                     start_t = clock();
-                    int *new_score = minimax(board, 9, -9999999, 9999999, 1, -1);
+                    int *new_score = minimax(board, 7, -9999999, 9999999, 1, -1);
                     printf("\n Runnnn isss  %lld\n", runn);
                     runn = 0;
                     column = *(new_score) + 1;
@@ -647,7 +649,7 @@ void Connect4(int **board, char input[100])
             }
 
             else
-            {   
+            {
                 if (k == 0)
                 {
                     board[5][3] = AIPIECE;
@@ -657,23 +659,25 @@ void Connect4(int **board, char input[100])
                     board[3][3] = AIPIECE;
                 }
                 else if (k == 1 && board[5][3] == 0)
-                    {
+                {
                     board[5][3] = AIPIECE;
                 }
-                else if(k == 1 && board[5][3] == PlayerPiece){
-                    board[4][3]=AIPIECE;
+                else if (k == 1 && board[5][3] == PlayerPiece)
+                {
+                    board[4][3] = AIPIECE;
                 }
                 else if (k == 3 && board[3][3] == PlayerPiece)
                 {
                     board[5][2] = AIPIECE;
                 }
-                else if(k==4 && board[2][3] == PlayerPiece){
+                else if (k == 4 && board[2][3] == PlayerPiece)
+                {
                     board[5][2] = AIPIECE;
                 }
                 else
                 {
                     start_t = clock();
-                    int *new_score = minimax(board, 9, -9999999, 9999999, 1, -1);
+                    int *new_score = minimax(board, 7, -9999999, 9999999, 1, -1);
 
                     printf("\n Runnnn isss  %lld\n", runn);
                     runn = 0;
@@ -724,8 +728,9 @@ void Connect4(int **board, char input[100])
     }
 }
 
-int Who_Started(int **board)
+int *Who_Started(int **board)
 {
+    int *starter = (int *)malloc(2 * sizeof(int));
     int i;
     int j;
     int Num_entries = 0;
@@ -739,16 +744,23 @@ int Who_Started(int **board)
     }
 
     if (Num_entries % 2 == 0)
-        return 1;
-
-    return 2;
+    {
+        *starter = 1;
+        *(starter + 1) = Num_entries;
+        return starter;
+    }
+    *starter = 2;
+    *(starter + 1) = Num_entries;
+    return starter;
 }
 
 int make_move_KCGH_CODES(int **board)
 {
-
-    AIPIECE = Who_Started(board);
-
+    int *turn = Who_Started(board);
+    int entries = *(turn+1);
+    AIPIECE = *turn;
+    int column;
+    int depth=8;
     if (AIPIECE == 1)
     {
         PlayerPiece = 2;
@@ -757,8 +769,59 @@ int make_move_KCGH_CODES(int **board)
     {
         PlayerPiece = 1;
     }
-    int *column = minimax(board, 6, -9999999, 9999999, 1, -1);
-    return *column;
+
+    if (entries == 0)
+    {
+        column = 3;
+    }
+    else if (entries == 2 && board[4][3] == PlayerPiece)
+    {
+        column = 3;
+    }
+    else if (entries == 1 && board[5][3] == 0)
+    {
+        column = 3;
+    }
+    else if (entries == 1 && board[5][3] == PlayerPiece)
+    {
+        column = 3;
+    }
+    else if (entries == 3 && board[3][3] == PlayerPiece)
+    {
+        column = 2;
+    }
+    else if (entries == 4 && board[2][3] == PlayerPiece)
+    {
+        column = 2;
+    }
+    else{
+        if(entries>=16 && entries<21){
+            int *BOT = minimax(board, depth+1, -9999999, 9999999, 1, -1);
+            column = *BOT;
+            }
+        else if(entries>=21 && entries<28){
+            int *BOT = minimax(board, depth+2, -9999999, 9999999, 1, -1);
+            column = *BOT;
+        }
+        else if(entries>=28 && entries<35){
+            int *BOT = minimax(board, depth+3, -9999999, 9999999, 1, -1);
+            column = *BOT;
+        }
+        else if(entries>=35 entries<38){
+            int *BOT = minimax(board, depth+4, -9999999, 9999999, 1, -1);
+            column = *BOT;
+        }
+        else if(entries>=38){
+            int *BOT = minimax(board, depth+5, -9999999, 9999999, 1, -1);
+            column = *BOT;
+        }
+        else {
+        int *BOT = minimax(board, depth, -9999999, 9999999, 1, -1);
+        column = *BOT;
+        }
+        
+    }
+    return column;
 }
 
 int main()
