@@ -1,7 +1,13 @@
 #include <stdio.h>
-#include <math.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+#include <time.h>
+#include <Windows.h>
 
+long long int runn = 0;
+int AIPIECE_KCGH_CODES;
+int PlayerPiece_KCGH_CODES;
 /*
 
 This file contains the following functions:
@@ -657,16 +663,6 @@ Player 2 wins in rows 3 to 6 and columns 1 to 4
 In this case the player who spent less time during his turns wins the game.
 */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
-#include <time.h>
-#include <Windows.h>
-
-long long int runn = 0;
-int AIPIECE_KCGH_CODES;
-int PlayerPiece_KCGH_CODES;
 
 
 struct Player
