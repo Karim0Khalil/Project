@@ -504,7 +504,7 @@ void Connect4(int **board, char input[100])
         }
     }
 
-    else if (a == 1)
+        else if (a == 1)
     {
         printf("Player 1, Enter your name please: ");
         fgets(Player_1.Name, 40, stdin);
@@ -517,61 +517,47 @@ void Connect4(int **board, char input[100])
 
         printf("We will toss a coin to see who's lucky to start!\n");
 
-        Sleep(1000); // let them wait, just for fun 🙂
+        Sleep(6000); // let them wait, just for fun 🙂
 
-        int who_starts = CoinToss();
+        // int who_starts = CoinToss();
 
-        Sleep(1000); // let them wait, just for fun 🙂
+        // Sleep(1000); // let them wait, just for fun 🙂
 
-        if (who_starts == 1)
-        {                         // Actually we are not tossing a coin to see who starts, we actually toss a coin to see who is the red player (Player with insert number 1)
-            Player_1.Color = 'R'; // and the red player always starts.
-            Redptr = &Player_1;
-            YellowPtr = &Player_2;
-            printf("%s was lucky enough to start!\n", Player_1.Name);
-        }
-        else
-        {
-            Player_2.Color = 'R'; // Bot is red and player is yellow
-            Player_1.Color = 'Y';
-            Redptr = &Player_2;
-            printf("Bot was lucky enough to start!\n");
-        }
+        // if (who_starts == 1)
+        // {                         // Actually we are not tossing a coin to see who starts, we actually toss a coin to see who is the red player (Player with insert number 1)
+        //     Player_1.Color = 'R'; // and the red player always starts.
+        //     Redptr = &Player_1;
+        //     YellowPtr = &Player_2;
+        //     printf("%s was lucky enough to start!\n", Player_1.Name);
+        // }
+        // else
+        // {
+        //     Player_2.Color = 'R'; // Bot is red and player is yellow
+        //     Player_1.Color = 'Y';
+        //     Redptr = &Player_2;
+        //     printf("Bot was lucky enough to start!\n");
+        // }
 
-        if (Player_2.Color == 'R')
-        {
-            AIPIECE = 1;
-            PlayerPiece = 2;
-        }
-        else
-        {
-            AIPIECE = 2;
-            PlayerPiece = 1;
-        }
+        // if (Player_2.Color == 'R')
+        // {
+        //     AIPIECE = 1;
+        //     PlayerPiece = 2;
+        // }
+        // else
+        // {
+        //     AIPIECE = 2;
+        //     PlayerPiece = 1;
+        // }
+        //AIPIECE=1;
+        //PlayerPiece=2;
+        int column2;
+
 
         while (k < 42)
         {
-
-            start_t = clock();
-
-            if (PlayerPiece == 1)
-            {
-                printf("%s , Enter a number between 1 and 7: ", Redptr->Name);
-                fgets(input, 100, stdin);
-                while (valid_And_Legal(input, board) == 0)
-                {
-
-                    fgets(input, 100, stdin);
-                }
-                column = input[0] - '0'; //"input" is a char array, so we convert to int.
-                updateBoard(column, board, 1);
-                end_t = clock();
-                Player_1.time_taken += ((double)(end_t - start_t)) / CLOCKS_PER_SEC; // This increments Red's timer.
-            }
-
-            else
-            {
-                if (k == 0)
+            AIPIECE=1;
+            PlayerPiece=2;
+            if (k == 0)
                 {
                     board[5][3] = AIPIECE;
                 }
@@ -593,20 +579,17 @@ void Connect4(int **board, char input[100])
                 else if(k==4 && board[2][3] == PlayerPiece){
                     board[5][2] = AIPIECE;
                 }
+                else {
 
-                else
-                {
-                    start_t = clock();
-                    int *new_score = minimax(board, 8, -9999999, 9999999, 1, -1);
+                    int *new_score1 = minimax(board, 7, -9999999, 9999999, 1, -1);
                     printf("\n Runnnn isss  %lld\n", runn);
                     runn = 0;
-                    column = *(new_score) + 1;
+                    column = *(new_score1) + 1;
                     updateBoard(column, board, 1);
-                    free(new_score);
-                    end_t = clock();
-                    Player_2.time_taken += ((double)(end_t - start_t)) / CLOCKS_PER_SEC;
+                    free(new_score1);
                 }
-            }
+        end_t = clock();
+        Player_1.time_taken += ((double)(end_t - start_t)) / CLOCKS_PER_SEC;
 
             printBoard(board);
 
@@ -629,61 +612,19 @@ void Connect4(int **board, char input[100])
 
             k++;
 
-            if (PlayerPiece == 2)
-            {
-                printf("%s , Enter a number between 1 and 7: ", Player_1.Name);
-                start_t = clock();
-                fgets(input, 100, stdin);
-                while (valid_And_Legal(input, board) == 0)
-                {
+            AIPIECE=2;
+            PlayerPiece=1;
 
-                    fgets(input, 100, stdin);
-                }
+            start_t = clock();
+            int *new_score2 = minimax(board, 7, -9999999, 9999999, 1, -1);
 
-                column = input[0] - '0'; //"input" is a char array, so we convert to int.
-                updateBoard(column, board, 2);
-                end_t = clock();
-                Player_1.time_taken += ((double)(end_t - start_t)) / CLOCKS_PER_SEC; // This increments Yellow's timer.
-            }
-
-            else
-            {   
-                if (k == 0)
-                {
-                    board[5][3] = AIPIECE;
-                }
-                else if (k == 2 && board[4][3] == PlayerPiece)
-                {
-                    board[3][3] = AIPIECE;
-                }
-                else if (k == 1 && board[5][3] == 0)
-                    {
-                    board[5][3] = AIPIECE;
-                }
-                else if(k == 1 && board[5][3] == PlayerPiece){
-                    board[4][3]=AIPIECE;
-                }
-                else if (k == 3 && board[3][3] == PlayerPiece)
-                {
-                    board[5][2] = AIPIECE;
-                }
-                else if(k==4 && board[2][3] == PlayerPiece){
-                    board[5][2] = AIPIECE;
-                }
-                else
-                {
-                    start_t = clock();
-                    int *new_score = minimax(board, 8, -9999999, 9999999, 1, -1);
-
-                    printf("\n Runnnn isss  %lld\n", runn);
-                    runn = 0;
-                    column = *(new_score) + 1;
-                    updateBoard(column, board, 2);
-                    free(new_score);
-                    end_t = clock();
-                    Player_2.time_taken += ((double)(end_t - start_t)) / CLOCKS_PER_SEC; // This increments Yellow's timer.
-                }
-            }
+            printf("\n Runnnn isss  %lld\n", runn);
+            runn = 0;
+            column = *(new_score2) + 1;
+            updateBoard(column, board, 2);
+            free(new_score2);
+            end_t = clock();
+            Player_2.time_taken += ((double)(end_t - start_t)) / CLOCKS_PER_SEC; // This increments Yellow's timer.
 
             // updateBoard(column,board,2);
             printBoard(board);
@@ -708,17 +649,17 @@ void Connect4(int **board, char input[100])
 
         if (k == 42)
         {
-            if (Redptr->time_taken < YellowPtr->time_taken)
+            if (Player_1.time_taken < Player_2.time_taken)
             {
-                printf("Time taken by %s:%f\n", YellowPtr->Name, YellowPtr->time_taken);
-                printf("Time taken by %s:%f\n", Redptr->Name, Redptr->time_taken);
-                printf(" CONGRATULATIONS %s, you won!!!", Redptr->Name);
+                printf("Time taken by %s:%.3f\n", Player_1.Name, Player_1.time_taken);
+                printf("Time taken by Bot: %.3f\n", Player_2.time_taken);
+                printf(" CONGRATULATIONS %s, you won!!!", Player_1.Name);
             }
             else
             {
-                printf(" CONGRATULATIONS %s, you won!!!\n", YellowPtr->Name);
-                printf("Time taken by %s:%f\n", YellowPtr->Name, YellowPtr->time_taken);
-                printf("Time taken by %s:%f", Redptr->Name, Redptr->time_taken);
+                printf("Minimax Won ");
+                printf("Time taken by %s:%.3f\n", Player_1.Name, Player_1.time_taken);
+                printf("Time taken by Bot: %.3f\n", Player_2.time_taken);
             }
         }
     }
